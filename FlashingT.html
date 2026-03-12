@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sangthai Flashing Design | แบบมาตรฐานครอบเมทัลชีท</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -14,12 +14,10 @@
             --secondary: #4a90e2;
             --secondary-glow: rgba(74, 144, 226, 0.3);
             --bg-dark: #f0f4f8;
-            /* Soft light background */
             --surface: rgba(255, 255, 255, 0.85);
             --surface-hover: rgba(255, 255, 255, 1);
             --border: rgba(0, 0, 0, 0.1);
             --text-main: #1e293b;
-            /* Dark text for light mode */
             --text-muted: #64748b;
             --modal-bg: #ffffff;
             --card-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05);
@@ -37,7 +35,6 @@
             --secondary: #4a90e2;
             --secondary-glow: rgba(74, 144, 226, 0.4);
             --bg-dark: #0a0f1c;
-            /* Deeper, richer dark background */
             --surface: rgba(18, 26, 47, 0.6);
             --surface-hover: rgba(26, 37, 65, 0.8);
             --border: rgba(255, 255, 255, 0.08);
@@ -57,16 +54,16 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Prompt', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh; /* Changed from height:100vh for mobile scroll */
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            /* Premium layered gradients */
             background-image:
                 radial-gradient(circle at 0% 0%, var(--secondary-glow), transparent 35%),
                 radial-gradient(circle at 100% 100%, var(--primary-glow), transparent 35%);
@@ -74,7 +71,6 @@
             background-size: cover;
         }
 
-        /* ----- Glassmorphism Utility ----- */
         .glass {
             background: var(--surface);
             backdrop-filter: blur(24px);
@@ -94,7 +90,6 @@
             top: 0;
             z-index: 100;
             background: rgba(10, 15, 28, 0.05);
-            /* very subtle so light/dark works */
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
@@ -119,11 +114,8 @@
             box-shadow: 0 0 15px var(--primary-glow);
         }
 
-        .logo span {
-            color: var(--primary);
-        }
+        .logo span { color: var(--primary); }
 
-        /* --- Theme Toggle Button --- */
         .theme-btn {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -137,81 +129,68 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .theme-btn:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-            transform: scale(1.05);
+            flex-shrink: 0;
         }
 
         /* ----- Hero Section ----- */
         .hero {
             text-align: center;
-            padding: 30px 20px 10px;
+            padding: 40px 20px 20px;
             max-width: 900px;
             margin: 0 auto;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             line-height: 1.2;
             font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             background: linear-gradient(to right, var(--text-main), var(--text-muted), var(--primary));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .hero p {
-            font-size: 1.25rem;
-            font-weight: 300;
+            font-size: 1.15rem;
             color: var(--text-muted);
-            margin-bottom: 20px;
-            letter-spacing: 0.3px;
+            margin-bottom: 25px;
         }
 
         /* ----- Filter Tabs ----- */
         .filters {
             display: flex;
             justify-content: flex-start;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 10px;
             overflow-x: auto;
             flex-wrap: nowrap;
-            padding-bottom: 10px;
-            /* Hide scrollbar for cleaner look */
-            -ms-overflow-style: none;
-            /* IE and Edge */
+            padding: 5px 20px 15px;
+            margin: 0 -20px; /* Pull to edges on mobile */
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
             scrollbar-width: none;
-            /* Firefox */
         }
-
-        .filters::-webkit-scrollbar {
-            display: none;
-            /* Safari and Chrome */
+        .filters::-webkit-scrollbar { display: none; }
+        
+        .filters::before, .filters::after {
+            content: '';
+            flex: 0 0 5px; /* Spacing at ends for mobile scroll */
         }
 
         .filter-btn {
             flex-shrink: 0;
-            padding: 12px 28px;
+            padding: 10px 24px;
             border-radius: 30px;
             border: 1px solid var(--border);
             background: rgba(255, 255, 255, 0.03);
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-        }
-
-        .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
+            scroll-snap-align: start;
         }
 
         .filter-btn.active {
@@ -219,59 +198,36 @@
             color: var(--text-inverse);
             font-weight: 600;
             border-color: var(--primary);
-            box-shadow: 0 4px 20px var(--primary-glow);
+            box-shadow: 0 4px 15px var(--primary-glow);
         }
 
-        /* ----- Grid Layout ----- */
+        /* ----- Grid Layout (Changed to CSS Grid for Mobile UI) ----- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
+            padding: 0 20px 40px;
             width: 100%;
         }
 
         .flashing-grid {
-            display: flex;
-            overflow-x: auto;
-            overflow-y: auto;
-            gap: 25px;
-            padding: 10px 0 20px;
-            flex: 1;
-            align-items: center;
-            /* Slight top padding for hover shadow */
-            scroll-behavior: auto;
-            /* Remove smooth so drag isn't jittery */
-            /* Hide scrollbar for a native app feel */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            cursor: grab;
-        }
-
-        .flashing-grid:active {
-            cursor: grabbing;
-        }
-
-        .flashing-grid::-webkit-scrollbar {
-            display: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+            gap: 20px;
+            padding: 10px 0;
+            width: 100%;
         }
 
         /* ----- Flashing Card ----- */
         .card {
-            min-width: 300px;
-            max-width: 350px;
-            flex-shrink: 0;
-            padding: 28px 24px;
-            border-radius: 24px;
+            width: 100%;
+            padding: 24px 20px;
+            border-radius: 20px;
             border: 1px solid var(--border);
             background: var(--surface);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             box-shadow: var(--card-shadow);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -279,27 +235,31 @@
             flex-direction: column;
         }
 
-        .card:hover {
-            transform: translateY(-12px);
-            border-color: var(--primary);
-            box-shadow: var(--card-shadow-hover);
-            background: var(--surface-hover);
-        }
-
         .card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
+            top: 0; left: 0; right: 0; height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             opacity: 0;
             transition: opacity 0.3s;
         }
 
-        .card:hover::before {
-            opacity: 1;
+        /* Hover effects only on devices with mouse to prevent sticky states on mobile */
+        @media (hover: hover) {
+            .card:hover {
+                transform: translateY(-8px);
+                border-color: var(--primary);
+                box-shadow: var(--card-shadow-hover);
+                background: var(--surface-hover);
+            }
+            .card:hover::before { opacity: 1; }
+            .card:hover .image-placeholder { transform: scale(1.05); color: var(--primary); }
+            .card:hover .view-btn::after { transform: translateX(5px); }
+            .theme-btn:hover { color: var(--primary); border-color: var(--primary); transform: scale(1.05); }
+        }
+
+        .card:active {
+            transform: scale(0.98);
         }
 
         .image-placeholder {
@@ -311,33 +271,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
             color: var(--secondary);
-            transition: transform 0.5s;
-        }
-
-        .card:hover .image-placeholder {
-            transform: scale(1.05);
-            color: var(--primary);
+            transition: transform 0.3s ease;
         }
 
         .card h3 {
-            font-size: 1.35rem;
-            font-weight: 500;
-            letter-spacing: 0.2px;
-            margin-bottom: 12px;
+            font-size: 1.25rem;
+            margin-bottom: 10px;
             color: var(--text-main);
         }
 
         .card p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.5;
             flex-grow: 1;
         }
 
         .card-footer {
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -347,39 +299,28 @@
         }
 
         .category-tag {
-            background: rgba(43, 101, 236, 0.2);
-            color: #60a5fa;
+            background: rgba(43, 101, 236, 0.15);
+            color: #4a90e2;
             padding: 4px 10px;
             border-radius: 6px;
             font-size: 0.8rem;
+            font-weight: 500;
         }
 
         .view-btn {
             color: var(--primary);
-            text-decoration: none;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 5px;
         }
+        .view-btn::after { content: '→'; transition: transform 0.3s; }
 
-        .view-btn::after {
-            content: '→';
-            transition: transform 0.3s;
-        }
-
-        .card:hover .view-btn::after {
-            transform: translateX(5px);
-        }
-
-        /* ----- Modal (Preview Details) ----- */
+        /* ----- Modal ----- */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(5px);
             z-index: 1000;
             display: flex;
@@ -388,6 +329,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s;
+            padding: 15px;
         }
 
         .modal-overlay.active {
@@ -396,9 +338,9 @@
         }
 
         .modal-content {
-            width: 95%;
-            max-width: 1400px;
-            background: transparent;
+            width: 100%;
+            max-width: 900px;
+            background: var(--bg-dark);
             border: 1px solid var(--border);
             border-radius: 20px;
             position: relative;
@@ -407,7 +349,8 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-y: auto; /* Fix: Allow scrolling inside modal for mobile */
+            max-height: 90vh; /* Fix: Don't let modal exceed screen */
         }
 
         .modal-overlay.active .modal-content {
@@ -416,61 +359,52 @@
 
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             font-size: 1.2rem;
             cursor: pointer;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: background 0.2s;
-        }
-
-        .close-modal:hover {
-            background: rgba(255, 71, 87, 0.8);
         }
 
         .modal-img-wrapper {
             background: var(--modal-img-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 85vh;
-            /* Takes up massive vertical space */
+            height: 45vh; /* Adjusted for mobile view */
+            min-height: 250px;
             width: 100%;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         #modalImageContainer {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform-origin: center center;
         }
 
-        .modal-img-wrapper img,
-        #modalImageContainer img {
-            width: 100%;
-            height: 100%;
+        .modal-img-wrapper img, #modalImageContainer img {
+            width: 100%; height: 100%;
             object-fit: contain;
-            /* Remove padding so image can reach the sheer edges of the wrapper */
-            padding: 0;
         }
 
-        /* --- Zoom Controls --- */
         .zoom-controls {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            bottom: 15px;
+            right: 15px;
             display: flex;
-            gap: 12px;
+            gap: 8px;
             z-index: 10;
         }
 
@@ -478,8 +412,8 @@
             background: var(--surface);
             border: 1px solid var(--border);
             color: var(--text-main);
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -487,66 +421,21 @@
             cursor: pointer;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
         }
 
-        .zoom-btn:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .zoom-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 2.5;
-        }
+        .zoom-btn svg { width: 18px; height: 18px; stroke-width: 2.5; }
 
         .modal-details {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 20px 20px;
-            background: var(--bg-dark);
+            padding: 24px;
+            flex-shrink: 0;
             border-top: 2px solid var(--primary);
         }
 
-        .modal-details h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-
-        .modal-details p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .spec-list {
-            list-style: none;
-        }
-
-        .spec-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .spec-list li span:first-child {
-            color: var(--text-muted);
-        }
-
-        /* ----- Color Selector ----- */
-        .color-selector {
-            margin-top: 15px;
-            margin-bottom: 20px;
-        }
+        .modal-details h2 { font-size: 1.6rem; margin-bottom: 8px; color: var(--primary); }
+        .modal-details p { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; font-size: 0.95rem; }
 
         .color-selector h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-main);
             margin-bottom: 12px;
             display: flex;
@@ -554,69 +443,43 @@
             justify-content: space-between;
         }
 
-        .selected-color-text {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 400;
-        }
-
-        .color-options {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .selected-color-text { font-size: 0.9rem; color: var(--primary); font-weight: 400; }
+        .color-options { display: flex; gap: 10px; flex-wrap: wrap; }
 
         .color-swatch {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             position: relative;
-        }
-
-        .color-swatch:hover {
-            transform: scale(1.15);
-            border-color: rgba(255, 255, 255, 0.5);
         }
 
         .color-swatch.active {
             border-color: #fff;
             transform: scale(1.15);
-            box-shadow: 0 0 15px currentColor;
+            box-shadow: 0 0 10px currentColor;
         }
 
         .color-swatch.active::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            content: '✓'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); color: #fff;
+            font-size: 14px; font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
+        .color-swatch[data-color="#E2E8F0"].active::after { color: #0a0f1c; text-shadow: none; }
 
-        .color-swatch[data-color="#E2E8F0"].active::after {
-            color: #0a0f1c;
-            text-shadow: none;
-        }
-
+        /* ----- Mobile Adjustments ----- */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .modal-content {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-img-wrapper {
-                min-height: 200px;
-            }
+            nav { padding: 12px 20px; }
+            .logo { font-size: 1.2rem; }
+            .logo-img { width: 40px; height: 40px; }
+            .hero { padding: 30px 20px 10px; }
+            .hero h1 { font-size: 2.2rem; }
+            .modal-img-wrapper { height: 35vh; } /* Make image shorter so user sees text */
+            .modal-details h2 { font-size: 1.4rem; }
+            .container { padding: 0 15px 30px; }
         }
     </style>
 </head>
@@ -625,20 +488,18 @@
 
     <nav>
         <div class="logo">
-            <img src="logo-img.png" alt="Sangthai Logo" class="logo-img"
-                onerror="this.src='';this.style.display='none';">
+            <img src="logo-img.png" alt="Sangthai Logo" class="logo-img" onerror="this.src='';this.style.display='none';">
             <div>Sangthai Flashing<span>Design</span></div>
         </div>
         <button id="themeToggle" class="theme-btn" title="Toggle Theme">
-            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         </button>
     </nav>
 
     <header class="hero">
-        <h1>แบบมาตรฐานครอบเมทัลชีท<br>(Standard Flashing Profiles)</h1>
+        <h1>แบบมาตรฐานครอบเมทัลชีท</h1>
         <p>แสดงรายละเอียดการพับครอบ (Flashing) และเพิ่มความสวยงามให้กับตัวหลังคา</p>
 
         <div class="filters">
@@ -650,59 +511,43 @@
     </header>
 
     <div class="container">
+        <!-- Changed to a standard responsive Grid for better Mobile UX -->
         <div class="flashing-grid" id="flashingGrid">
             <!-- Cards will be injected by JavaScript -->
         </div>
     </div>
 
-    <!-- Modal for showing design details -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <button class="close-modal" id="closeModal">✕</button>
 
             <div class="modal-img-wrapper">
                 <div id="modalImageContainer">
-                    <!-- Placeholder for actual profile images -->
-                    <svg id="modalIcon" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
-                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></svg>
+                    <svg id="modalIcon" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></svg>
                 </div>
 
-                <!-- Zoom Controls -->
                 <div class="zoom-controls">
                     <button id="zoomOutBtn" class="zoom-btn" title="ซูมออก (-)">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     </button>
                     <button id="zoomResetBtn" class="zoom-btn" title="ขนาดเดิม">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                            <polyline points="3 3 3 8 8 8"></polyline>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
                     </button>
                     <button id="zoomInBtn" class="zoom-btn" title="ซูมเข้า (+)">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     </button>
                 </div>
             </div>
 
             <div class="modal-details">
-                <div class="category-tag" id="modalCategory"
-                    style="display:inline-block; margin-bottom: 10px; width: max-content;">Category</div>
+                <div class="category-tag" id="modalCategory" style="display:inline-block; margin-bottom: 10px; width: max-content;">Category</div>
                 <h2 id="modalTitle">ครอบชื่อ...</h2>
                 <p id="modalDesc">รายละเอียดเบื้องต้นเกี่ยวกับการใช้งานครอบตัวนี้...</p>
 
                 <div class="color-selector">
-                    <h3>เลือกสี (Color Options) <span id="selectedColorText" class="selected-color-text">ซิงคาลุม
-                            (Zincalume)</span></h3>
+                    <h3>เลือกสี (Color Options) <span id="selectedColorText" class="selected-color-text">ซิงคาลุม (Zincalume)</span></h3>
                     <div class="color-options" id="modalColorOptions">
-                        <!-- Colors will be injected here -->
+                        <!-- Colors injected here -->
                     </div>
                 </div>
             </div>
@@ -710,166 +555,27 @@
     </div>
 
     <script>
-        // Data for Flashing Standards (Real Photos)
         const flashingData = [
-            {
-                id: 1,
-                title: "ครอบจั่วลอนสเปน",
-                category: "roof",
-                categoryLabel: "งานหลังคา",
-                desc: "ครอบจั่วสำหรับลอนสเปน 457",
-                image: "PhotoFlashing/ครอบจั่วลอนสเปน 457 GEN.png",
-                icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>",
-                specs: { angle: "ตามรูป", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 2,
-                title: "ครอบจั่ว",
-                category: "roof",
-                categoryLabel: "งานหลังคา",
-                desc: "ครอบจั่วมุมสำหรับหลังคา 457",
-                image: "PhotoFlashing/ครอบจั่วมุม 457 GEN.png",
-                icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>",
-                specs: { angle: "ตามรูป", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 3,
-                title: "ครอบสันตะเข้",
-                category: "roof",
-                categoryLabel: "งานหลังคา",
-                desc: "ครอบสันตะเข้ 457",
-                image: "PhotoFlashing/ครอบสันตะเข้ 457  GEN.png",
-                icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>",
-                specs: { angle: "ตามรูป", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 4,
-                title: "ครอบข้างโค้ง ( หน้า 5 นิ้ว)",
-                category: "roof",
-                categoryLabel: "งานหลังคา",
-                desc: "ปิดแนวชายคาด้านข้าง แบบโค้ง 304",
-                image: "PhotoFlashing/ครอบข้างตรง  304  GEN.png",
-                icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>",
-                specs: { angle: "90 องศา", left: "-", right: "-", tip: "" }
-            },
-            {
-                id: 5,
-                title: "ครอบข้างตรง ( หน้า 5 นิ้ว)",
-                category: "roof",
-                categoryLabel: "งานหลังคา",
-                desc: "ปิดแนวชายคาด้านข้าง แบบตรง 5 นิ้ว 457",
-                image: "PhotoFlashing/ครอบข้างตรง5 457 GEN.png",
-                icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>",
-                specs: { angle: "90 องศา", left: "-", right: "-", tip: "ควรยึดสกรูทุกๆ ระยะ 50 ซม." }
-            },
-            {
-                id: 6,
-                title: "ครอบข้างตรง 8 นิ้ว",
-                category: "roof",
-                categoryLabel: "งานหลังคา",
-                desc: "ปิดแนวชายคาด้านข้าง แบบตรง 8 นิ้ว 457",
-                image: "PhotoFlashing/ครอบข้างตรง8  457 GEN.png",
-                icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>",
-                specs: { angle: "90 องศา", left: "-", right: "-", tip: "ควรยึดสกรูทุกๆ ระยะ 50 ซม." }
-            },
-            {
-                id: 7,
-                title: "ครอบชนผนังปูน",
-                category: "wall",
-                categoryLabel: "งานผนัง",
-                desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 304",
-                image: "PhotoFlashing/ครอบชนผนังปูน 304 GEN.png",
-                icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>",
-                specs: { angle: "90 - 100 องศา", left: "ฝังผนัง 2 ซม.", right: "แนบหลังคา", tip: "ควรกรีดผนังฝังและยิงซิลิโคน" }
-            },
-            {
-                id: 8,
-                title: "ครอบชนผนังปูน",
-                category: "wall",
-                categoryLabel: "งานผนัง",
-                desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 457",
-                image: "PhotoFlashing/ครอบชนผนังปูน 457 GEN.png",
-                icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>",
-                specs: { angle: "90 - 100 องศา", left: "ฝังผนัง 2 ซม.", right: "แนบหลังคา", tip: "ควรกรีดผนังฝังและยิงซิลิโคน" }
-            },
-            {
-                id: 9,
-                title: "ครอบชนผนังไม้",
-                category: "wall",
-                categoryLabel: "งานผนัง",
-                desc: "ปิดรอยต่อระหว่างหลังคากับผนังไม้ 304",
-                image: "PhotoFlashing/ครอบชนผนังไม้ 304 GEN.png",
-                icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>",
-                specs: { angle: "90 - 100 องศา", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 10,
-                title: "ครอบชนผนังไม้",
-                category: "wall",
-                categoryLabel: "งานผนัง",
-                desc: "ปิดรอยต่อระหว่างหลังคากับผนังไม้ 457",
-                image: "PhotoFlashing/ครอบชนผนังไม้ 457  GEN.png",
-                icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>",
-                specs: { angle: "90 - 100 องศา", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 11,
-                title: "ครอบมุมเสา",
-                category: "wall",
-                categoryLabel: "งานผนัง",
-                desc: "เข้ามุมเสาหรือผนัง 304",
-                image: "PhotoFlashing/ครอบมุมเสา 304 GEN.png",
-                icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>",
-                specs: { angle: "90 องศา", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 12,
-                title: "ครอบมุมเสา",
-                category: "wall",
-                categoryLabel: "งานผนัง",
-                desc: "เข้ามุมเสาหรือผนัง 457",
-                image: "PhotoFlashing/ครอบมุมเสา 457 GEN.png",
-                icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>",
-                specs: { angle: "90 องศา", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 13,
-                title: "ครอบมุมเสา แบบมีปีก",
-                category: "wall",
-                categoryLabel: "งานผนัง",
-                desc: "เข้ามุมเสาหรือผนัง แบบมีปีกยืด 457",
-                image: "PhotoFlashing/ครอบมุมเสา 457 แบบมีปีก GEN.png",
-                icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>",
-                specs: { angle: "90 องศา", left: "-", right: "-", tip: "-" }
-            },
-            {
-                id: 14,
-                title: "รางน้ำมาตราฐาน แบบตัว U",
-                category: "accessories",
-                categoryLabel: "อุปกรณ์ตกแต่ง",
-                desc: "รางน้ำมาตรฐานตัว U 457",
-                image: "PhotoFlashing/รางน้ำมาตราฐาน 457 แบบ ตัว U GEN.png",
-                icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>",
-                specs: { angle: "U Shape", left: "-", right: "-", tip: "ควรคำนวณปริมาณน้ำฝน" }
-            },
-            {
-                id: 15,
-                title: "รางน้ำสันตะเข้ ",
-                category: "accessories",
-                categoryLabel: "อุปกรณ์ตกแต่ง",
-                desc: "รางน้ำสันตะเข้ 457",
-                image: "PhotoFlashing/รางน้ำสันตะเข้ 457 GEN.png",
-                icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>",
-                specs: { angle: "V Shape", left: "-", right: "-", tip: "-" }
-            },
-
+            { id: 1, title: "ครอบจั่วลอนสเปน", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบจั่วสำหรับลอนสเปน 457", image: "PhotoFlashing/ครอบจั่วลอนสเปน 457 GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
+            { id: 2, title: "ครอบจั่ว", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบจั่วมุมสำหรับหลังคา 457", image: "PhotoFlashing/ครอบจั่วมุม 457 GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
+            { id: 3, title: "ครอบสันตะเข้", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบสันตะเข้ 457", image: "PhotoFlashing/ครอบสันตะเข้ 457  GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
+            { id: 4, title: "ครอบข้างโค้ง (หน้า 5 นิ้ว)", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบโค้ง 304", image: "PhotoFlashing/ครอบข้างตรง  304  GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
+            { id: 5, title: "ครอบข้างตรง (หน้า 5 นิ้ว)", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบตรง 5 นิ้ว 457", image: "PhotoFlashing/ครอบข้างตรง5 457 GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
+            { id: 6, title: "ครอบข้างตรง 8 นิ้ว", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบตรง 8 นิ้ว 457", image: "PhotoFlashing/ครอบข้างตรง8  457 GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
+            { id: 7, title: "ครอบชนผนังปูน", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 304", image: "PhotoFlashing/ครอบชนผนังปูน 304 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
+            { id: 8, title: "ครอบชนผนังปูน", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 457", image: "PhotoFlashing/ครอบชนผนังปูน 457 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
+            { id: 9, title: "ครอบชนผนังไม้", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังไม้ 304", image: "PhotoFlashing/ครอบชนผนังไม้ 304 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
+            { id: 10, title: "ครอบชนผนังไม้", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังไม้ 457", image: "PhotoFlashing/ครอบชนผนังไม้ 457  GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
+            { id: 11, title: "ครอบมุมเสา", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง 304", image: "PhotoFlashing/ครอบมุมเสา 304 GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
+            { id: 12, title: "ครอบมุมเสา", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง 457", image: "PhotoFlashing/ครอบมุมเสา 457 GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
+            { id: 13, title: "ครอบมุมเสา แบบมีปีก", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง แบบมีปีกยืด 457", image: "PhotoFlashing/ครอบมุมเสา 457 แบบมีปีก GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
+            { id: 14, title: "รางน้ำมาตราฐาน แบบตัว U", category: "accessories", categoryLabel: "อุปกรณ์ตกแต่ง", desc: "รางน้ำมาตรฐานตัว U 457", image: "PhotoFlashing/รางน้ำมาตราฐาน 457 แบบ ตัว U GEN.png", icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>" },
+            { id: 15, title: "รางน้ำสันตะเข้ ", category: "accessories", categoryLabel: "อุปกรณ์ตกแต่ง", desc: "รางน้ำสันตะเข้ 457", image: "PhotoFlashing/รางน้ำสันตะเข้ 457 GEN.png", icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>" },
         ];
 
-        // Elements
         const grid = document.getElementById("flashingGrid");
         const filterBtns = document.querySelectorAll(".filter-btn");
 
-        // Modal Elements
         const modal = document.getElementById("modalOverlay");
         const closeModal = document.getElementById("closeModal");
         const modalTitle = document.getElementById("modalTitle");
@@ -878,103 +584,54 @@
         const modalColorOptions = document.getElementById("modalColorOptions");
         const selectedColorText = document.getElementById("selectedColorText");
 
-        // Zoom & Pan Elements & Logic
+        // Zoom Logic
         const zoomInBtn = document.getElementById('zoomInBtn');
         const zoomOutBtn = document.getElementById('zoomOutBtn');
         const zoomResetBtn = document.getElementById('zoomResetBtn');
         const imgWrapperElem = document.querySelector('.modal-img-wrapper');
-        let currentZoom = 1;
-        let panX = 0;
-        let panY = 0;
-        const zoomStep = 0.25;
-        const maxZoom = 5;
-        const minZoom = 0.5;
-        let isPanning = false;
-        let startPanX = 0;
-        let startPanY = 0;
+        let currentZoom = 1; let panX = 0; let panY = 0;
+        const zoomStep = 0.25; const maxZoom = 4; const minZoom = 0.5;
+        let isPanning = false; let startPanX = 0; let startPanY = 0;
 
         function updateZoom(immediate = false) {
             const container = document.getElementById('modalImageContainer');
             if (container) {
                 container.style.transition = immediate ? 'none' : 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
                 container.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
-                if (currentZoom > 1) {
-                    container.style.cursor = isPanning ? 'grabbing' : 'grab';
-                } else {
-                    container.style.cursor = 'default';
-                }
+                container.style.cursor = currentZoom > 1 ? (isPanning ? 'grabbing' : 'grab') : 'default';
             }
         }
 
-        zoomInBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (currentZoom < maxZoom) {
-                currentZoom += zoomStep;
-                updateZoom(false);
-            }
-        });
+        zoomInBtn.addEventListener('click', (e) => { e.stopPropagation(); if (currentZoom < maxZoom) { currentZoom += zoomStep; updateZoom(); } });
+        zoomOutBtn.addEventListener('click', (e) => { e.stopPropagation(); if (currentZoom > minZoom) { currentZoom -= zoomStep; if (currentZoom <= 1) { panX = 0; panY = 0; } updateZoom(); } });
+        zoomResetBtn.addEventListener('click', (e) => { e.stopPropagation(); currentZoom = 1; panX = 0; panY = 0; updateZoom(); });
 
-        zoomOutBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (currentZoom > minZoom) {
-                currentZoom -= zoomStep;
-                if (currentZoom <= 1) {
-                    panX = 0;
-                    panY = 0;
-                }
-                updateZoom(false);
-            }
-        });
-
-        zoomResetBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            currentZoom = 1;
-            panX = 0;
-            panY = 0;
-            updateZoom(false);
-        });
-
-        imgWrapperElem.addEventListener('wheel', (e) => {
-            if (!modal.classList.contains('active')) return;
-            e.preventDefault();
-            if (e.deltaY < 0) {
-                if (currentZoom < maxZoom) currentZoom = Math.min(maxZoom, currentZoom + 0.1);
-            } else {
-                if (currentZoom > minZoom) currentZoom = Math.max(minZoom, currentZoom - 0.1);
-                if (currentZoom <= 1) {
-                    panX = 0;
-                    panY = 0;
-                }
-            }
-            updateZoom(true);
-        }, { passive: false });
-
+        // Touch/Mouse Drag for Zoomed image
         imgWrapperElem.addEventListener('mousedown', (e) => {
             if (currentZoom > 1 && !e.target.closest('.zoom-btn')) {
-                e.preventDefault();
-                isPanning = true;
-                startPanX = e.clientX - panX;
-                startPanY = e.clientY - panY;
-                updateZoom(true);
+                e.preventDefault(); isPanning = true; startPanX = e.clientX - panX; startPanY = e.clientY - panY; updateZoom(true);
             }
         });
-
         window.addEventListener('mousemove', (e) => {
-            if (isPanning && currentZoom > 1) {
-                panX = e.clientX - startPanX;
-                panY = e.clientY - startPanY;
-                updateZoom(true);
-            }
+            if (isPanning && currentZoom > 1) { panX = e.clientX - startPanX; panY = e.clientY - startPanY; updateZoom(true); }
         });
+        window.addEventListener('mouseup', () => { if (isPanning) { isPanning = false; updateZoom(true); } });
 
-        window.addEventListener('mouseup', () => {
-            if (isPanning) {
-                isPanning = false;
-                updateZoom(true);
-            }
-        });
+        // Mobile Touch Pan (For Zoomed Image)
+        imgWrapperElem.addEventListener('touchstart', (e) => {
+             if (currentZoom > 1 && e.touches.length === 1) {
+                isPanning = true; startPanX = e.touches[0].clientX - panX; startPanY = e.touches[0].clientY - panY;
+             }
+        }, {passive: true});
+        imgWrapperElem.addEventListener('touchmove', (e) => {
+             if (isPanning && currentZoom > 1 && e.touches.length === 1) {
+                 e.preventDefault(); // Prevent page scroll while panning image
+                 panX = e.touches[0].clientX - startPanX; panY = e.touches[0].clientY - startPanY; updateZoom(true);
+             }
+        }, {passive: false});
+        imgWrapperElem.addEventListener('touchend', () => { isPanning = false; });
 
-        // Standard Colors array
+        // Colors
         const standardColors = [
             { name: "ซิงคาลุม (Zincalume)", hex: "#E2E8F0" },
             { name: "แดง (Red)", hex: "#DC2626" },
@@ -985,7 +642,7 @@
             { name: "ดำ (Black)", hex: "#111827" }
         ];
 
-        // Render Function
+        // Render Cards
         function renderCards(filter = "all") {
             grid.innerHTML = "";
             const filteredData = filter === "all" ? flashingData : flashingData.filter(item => item.category === filter);
@@ -994,14 +651,10 @@
                 const card = document.createElement("div");
                 card.className = "card glass";
                 let mediaContent = item.image
-                    ? `<img src="${item.image}" alt="${item.title}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; padding: 10px;">`
-                    : `<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            ${item.icon}
-                       </svg>`;
+                    ? `<img src="${item.image}" alt="${item.title}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; padding: 10px;" loading="lazy">`
+                    : `<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>`;
                 card.innerHTML = `
-                    <div class="image-placeholder" style="${item.image ? 'background: transparent;' : ''}">
-                        ${mediaContent}
-                    </div>
+                    <div class="image-placeholder" style="${item.image ? 'background: transparent;' : ''}">${mediaContent}</div>
                     <h3>${item.title}</h3>
                     <p>${item.desc}</p>
                     <div class="card-footer">
@@ -1011,50 +664,24 @@
                 `;
 
                 card.addEventListener('click', () => {
-                    // ID 4 opens the custom 3D view page for straight flashings (304)
-                    if (item.id === 4) {
-                        window.location.href = `Flashing3D_304.html?id=${item.id}`;
-                    }
-                    // IDs 5, 6 open the custom 3D view page for 5" and 8" straight flashings
-                    else if ([5, 6].includes(item.id)) {
-                        window.location.href = `Flashing3D_58L457.html?id=${item.id}`;
-                    }
-                    else if (item.id === 1) {
-                        // ID 1 opens the custom 3D view page for Spanish Ridge (ครอบจั่วลอนสเปน 457)
-                        window.location.href = `Flashing3D_SpanishRidge.html?id=${item.id}`;
-                    } else if (item.id === 2) {
-                        // ID 2 opens the custom 3D view page for Ridge flashings (ครอบจั่ว)
-                        window.location.href = `Flashing3D_Ridge.html?id=${item.id}`;
-                    } else if (item.id === 3) {
-                        // ID 3 opens the custom 3D view page for Hip Ridge Flashing (ครอบสันตะเข้ 457)
-                        window.location.href = `Flashing3D_HipRidge.html?id=${item.id}`;
-                    } else if ([7, 8].includes(item.id)) {
-                        // IDs 7, 8 open the custom 3D view page for Concrete Wall Flashing (ครอบชนผนังปูน)
-                        window.location.href = `Flashing3D_WallConcrete.html?id=${item.id}`;
-                    } else if ([9, 10].includes(item.id)) {
-                        // IDs 9, 10 open the custom 3D view page for Wooden Wall Flashing (ครอบชนผนังไม้)
-                        window.location.href = `Flashing3D_WallWood.html?id=${item.id}`;
-                    } else if ([11, 12].includes(item.id)) {
-                        // IDs 11, 12 open the custom 3D view page for Corner Post Flashing (ครอบมุมเสาไม่ติดปีก)
-                        window.location.href = `Flashing3D_Corner.html?id=${item.id}`;
-                    } else if (item.id === 13) {
-                        // ID 13 opens the custom 3D view page for Corner Post Flashing With Wing (ครอบมุมเสา 457 แบบมีปีก)
-                        window.location.href = `Flashing3D_CornerWing.html?id=${item.id}`;
-                    } else if (item.id === 14) {
-                        // ID 14 opens the custom 3D view for U Shape Gutter (รางน้ำมาตราฐาน 457 แบบ ตัว U)
-                        window.location.href = `Flashing3D_GutterU.html?id=${item.id}`;
-                    } else if (item.id === 15) {
-                        // ID 15 opens the custom 3D view for Valley Gutter (รางน้ำสันตะเข้ 457)
-                        window.location.href = `Flashing3D_ValleyGutter.html?id=${item.id}`;
-                    } else {
-                        openModal(item);
-                    }
+                    if (item.id === 4) { window.location.href = `Flashing3D_304.html?id=${item.id}`; }
+                    else if ([5, 6].includes(item.id)) { window.location.href = `Flashing3D_58L457.html?id=${item.id}`; }
+                    else if (item.id === 1) { window.location.href = `Flashing3D_SpanishRidge.html?id=${item.id}`; }
+                    else if (item.id === 2) { window.location.href = `Flashing3D_Ridge.html?id=${item.id}`; }
+                    else if (item.id === 3) { window.location.href = `Flashing3D_HipRidge.html?id=${item.id}`; }
+                    else if ([7, 8].includes(item.id)) { window.location.href = `Flashing3D_WallConcrete.html?id=${item.id}`; }
+                    else if ([9, 10].includes(item.id)) { window.location.href = `Flashing3D_WallWood.html?id=${item.id}`; }
+                    else if ([11, 12].includes(item.id)) { window.location.href = `Flashing3D_Corner.html?id=${item.id}`; }
+                    else if (item.id === 13) { window.location.href = `Flashing3D_CornerWing.html?id=${item.id}`; }
+                    else if (item.id === 14) { window.location.href = `Flashing3D_GutterU.html?id=${item.id}`; }
+                    else if (item.id === 15) { window.location.href = `Flashing3D_ValleyGutter.html?id=${item.id}`; }
+                    else { openModal(item); }
                 });
                 grid.appendChild(card);
             });
         }
 
-        // Filter Logic
+        // Filters
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
@@ -1063,18 +690,16 @@
             });
         });
 
-        // Modal Logic
+        // Modal Functions
         function openModal(item) {
             modalTitle.textContent = item.title;
             modalDesc.textContent = item.desc;
             modalCategory.textContent = item.categoryLabel;
 
-            // Render Colors
             modalColorOptions.innerHTML = standardColors.map((c, index) =>
                 `<div class="color-swatch ${index === 0 ? 'active' : ''}" 
                       style="background-color: ${c.hex}; color: ${c.hex};" 
-                      data-color="${c.hex}"
-                      title="${c.name}"
+                      data-color="${c.hex}" title="${c.name}"
                       onclick="selectColor(this, '${c.name}', '${c.hex}')">
                  </div>`
             ).join('');
@@ -1082,146 +707,57 @@
 
             const imgWrapper = document.querySelector('.modal-img-wrapper');
             const imgContainer = document.getElementById('modalImageContainer');
+            
             if (item.image) {
                 imgContainer.innerHTML = `<img id="modalImage" src="${item.image}" alt="${item.title}" style="transition: filter 0.3s ease;">`;
                 imgWrapper.style.background = 'var(--modal-img-bg)';
-                imgWrapper.style.borderBottom = 'none';
             } else {
                 imgContainer.innerHTML = `<svg id="modalIcon" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>`;
                 imgWrapper.style.background = 'var(--surface)';
-                imgWrapper.style.borderBottom = '1px dashed var(--border)';
             }
 
-            // Reset zoom
-            currentZoom = 1;
-            panX = 0;
-            panY = 0;
-            updateZoom();
-
+            currentZoom = 1; panX = 0; panY = 0; updateZoom();
             modal.classList.add('active');
-            document.body.style.overflow = "hidden"; // prevent background scroll
+            document.body.style.overflow = "hidden"; // Prevent background scrolling when modal is open
         }
 
-        function selectColor(element, name, hexColor) {
+        window.selectColor = function(element, name, hexColor) {
             document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
             selectedColorText.textContent = name;
 
-            // Visually adjust image color via drop-shadow
             const img = document.getElementById('modalImage');
-            if (img) {
-                if (hexColor === "#E2E8F0") {
-                    img.style.filter = "none";
-                } else {
-                    img.style.filter = `drop-shadow(0 0 20px ${hexColor})`;
-                }
-            }
+            if (img) { img.style.filter = hexColor === "#E2E8F0" ? "none" : `drop-shadow(0 0 20px ${hexColor})`; }
         }
 
         function close() {
             modal.classList.remove('active');
             document.body.style.overflow = "auto";
-            currentZoom = 1;
-            panX = 0;
-            panY = 0;
-            updateZoom();
+            currentZoom = 1; panX = 0; panY = 0; updateZoom();
         }
 
         closeModal.addEventListener('click', close);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) close();
-        });
-
-        // --- Auto Scroll Feature ---
-        let autoScrollInterval;
-        const scrollSpeed = 1; // pixels per step
-        const scrollDelay = 20; // ms per step
-
-        function startAutoScroll() {
-            stopAutoScroll(); // Clear any existing interval
-            autoScrollInterval = setInterval(() => {
-                grid.scrollBy(scrollSpeed, 0);
-
-                // If reached the end, loop back to the start (optional smooth loop)
-                // Note: precise width calculation can be tricky with gap/padding,
-                // so we check if scrollLeft + clientWidth >= scrollWidth - small threshold
-                if (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 5) {
-                    grid.scrollLeft = 0;
-                }
-            }, scrollDelay);
-        }
-
-        function stopAutoScroll() {
-            if (autoScrollInterval) {
-                clearInterval(autoScrollInterval);
-            }
-        }
-
-        // --- Drag to Scroll Feature (Mouse Friendly) ---
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        grid.addEventListener('mousedown', (e) => {
-            isDown = true;
-            grid.classList.add('active'); // Optional: for styling while dragging
-            startX = e.pageX - grid.offsetLeft;
-            scrollLeft = grid.scrollLeft;
-            stopAutoScroll(); // Stop auto-scroll while user is actively grabbing
-
-            // Prevent text selection while dragging
-            e.preventDefault();
-        });
-
-        grid.addEventListener('mouseleave', () => {
-            isDown = false;
-            grid.classList.remove('active');
-            startAutoScroll(); // Resume auto-scroll when mouse leaves
-        });
-
-        grid.addEventListener('mouseup', () => {
-            isDown = false;
-            grid.classList.remove('active');
-            // Resume happens in 'mouseleave' or we can choose to leave it off until they leave
-        });
-
-        grid.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - grid.offsetLeft;
-            const walk = (x - startX) * 2; // Scroll speed multiplier (2 = fast)
-            grid.scrollLeft = scrollLeft - walk;
-        });
-
-        // Pause scrolling when user interacts (touch)
-        grid.addEventListener('touchstart', stopAutoScroll, { passive: true });
-        grid.addEventListener('touchend', startAutoScroll, { passive: true });
-
-        // Note: Removed mouseenter/mouseleave from Auto-Scroll block below
-        // because it conflicts with the drag logic above.
+        modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
 
         // Initialize 
         renderCards();
-        startAutoScroll();
 
-        // --- Theme Toggle Logic ---
+        // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
-
         let currentTheme = localStorage.getItem('theme') || 'light';
 
         function updateThemeUI() {
             if (currentTheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>'; // Sun icon
+                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
             } else {
                 document.documentElement.removeAttribute('data-theme');
-                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'; // Moon icon
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
             }
         }
 
         updateThemeUI();
-
         themeToggle.addEventListener('click', () => {
             currentTheme = currentTheme === 'light' ? 'dark' : 'light';
             localStorage.setItem('theme', currentTheme);
@@ -1230,5 +766,4 @@
 
     </script>
 </body>
-
 </html>
