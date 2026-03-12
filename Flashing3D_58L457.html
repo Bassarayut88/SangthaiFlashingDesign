@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model - ครอบข้างตรง 304</title>
+    <!-- ใช้ Tailwind CSS สำหรับตกแต่ง UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            /* สีพื้นหลังสีเหลืองคล้ายในรูปตัวอย่าง */
+            background-color: #f1c40f;
+            background: radial-gradient(circle, #f1c40f 0%, #e67e22 100%);
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .control-panel {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* สไตล์สำหรับหน้าต่างเลือกสีแบบ Classic Windows */
+        .classic-dialog {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 1px 1px 0px #fff;
+            border-radius: 6px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        .color-box {
+            width: 22px;
+            height: 20px;
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #808080, inset -2px -2px #dfdfdf, inset 2px 2px #000;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .color-box.selected {
+            outline: 1px dotted #000;
+            outline-offset: 1px;
+        }
+
+        .classic-btn {
+            background: #e1e1e1;
+            border: 1px solid;
+            border-color: #fff #666 #666 #fff;
+            padding: 2px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .classic-btn:active {
+            border-color: #666 #fff #fff #666;
+            padding: 3px 9px 1px 11px;
+            /* เลื่อนข้อความตอนกด */
+        }
+
+        .classic-input {
+            border: 1px solid #808080;
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 1px 3px;
+            font-size: 12px;
+        }
+    </style>
+
+    <!-- นำเข้าไลบรารี Three.js -->
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- พื้นที่สำหรับแสดง 3D -->
+    <div id="canvas-container"></div>
+
+    <!-- ปุ่มเปิดแผงควบคุม (แสดงตอนแผงตั้งค่าโดนซ่อน) -->
+    <button id="openPanelBtn"
+        class="absolute top-6 left-6 z-10 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-md border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-white flex items-center gap-2 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+            </path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+            </path>
+        </svg>
+        ตั้งค่าชิ้นงาน
+    </button>
+
+    <!-- ปุ่มกลับไปหน้าหลัก -->
+    <a href="FlashingT.html"
+        class="absolute top-6 right-6 z-10 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-md border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-white flex items-center gap-2 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+            </path>
+        </svg>
+        กลับหน้าหลัก
+    </a>
+
+    <!-- แผงควบคุม (UI) -->
+    <div id="controlPanel"
+        class="control-panel p-6 rounded-2xl border border-gray-100 w-80 max-h-[95vh] overflow-y-auto hidden">
+        <div class="flex justify-between items-center border-b pb-2 mb-5">
+            <h1 class="text-xl font-bold text-gray-800">ตั้งค่าโมเดล</h1>
+            <button id="closePanelBtn" class="text-gray-400 hover:text-red-500 transition-colors" title="ซ่อนแผงควบคุม">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- เพิ่มส่วนกำหนดขนาด -->
+        <div class="mb-5">
+            <h2 class="text-sm font-semibold text-gray-700 mb-2">กำหนดขนาด (เซนติเมตร)</h2>
+            <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div class="col-span-2">
+                    <label class="block text-xs text-gray-600 mb-1">ปีกบน (Top)</label>
+                    <input type="number" id="dimWTop" value="11.4" step="0.1"
+                        class="w-full border border-gray-300 rounded p-1 text-sm focus:outline-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-600 mb-1">ขอบลง (Back)</label>
+                    <input type="number" id="dimHBack" value="10.0" step="0.1"
+                        class="w-full border border-gray-300 rounded p-1 text-sm focus:outline-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-600 mb-1">ปีกเอียง (Slant)</label>
+                    <input type="number" id="dimLSlant" value="4.0" step="0.1"
+                        class="w-full border border-gray-300 rounded p-1 text-sm focus:outline-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-600 mb-1">ฐานล่าง (Bottom)</label>
+                    <input type="number" id="dimWBottom" value="2.5" step="0.1"
+                        class="w-full border border-gray-300 rounded p-1 text-sm focus:outline-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-600 mb-1">พับลง (Lip)</label>
+                    <input type="number" id="dimHLip" value="2.5" step="0.1"
+                        class="w-full border border-gray-300 rounded p-1 text-sm focus:outline-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">เลือกสี (Color)</label>
+            <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-200">
+                <!-- เปลี่ยนจาก input type="color" เป็นปุ่มเรียก Modal คลาสสิก -->
+                <button id="openColorDialogBtn"
+                    class="w-12 h-10 rounded border-2 border-gray-300 shadow-inner bg-[#cccccc] focus:outline-none focus:ring-2 focus:ring-blue-400"></button>
+                <span id="colorHex" class="text-sm text-gray-600 font-mono font-medium uppercase">#CCCCCC</span>
+            </div>
+
+            <!-- สีตัวอย่างสำเร็จรูป -->
+            <div class="mt-3 flex gap-3">
+                <button
+                    class="w-7 h-7 rounded-full bg-[#cccccc] border-2 border-white shadow-md hover:scale-110 transition-transform"
+                    onclick="window.setColor('#cccccc')" title="สีเงิน (Silver)"></button>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#2c3e50] border-2 border-white shadow-md hover:scale-110 transition-transform"
+                    onclick="window.setColor('#2c3e50')" title="สีเทาเข้ม (Dark Grey)"></button>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#8b0000] border-2 border-white shadow-md hover:scale-110 transition-transform"
+                    onclick="window.setColor('#8b0000')" title="สีแดงเลือดหมู (Dark Red)"></button>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#006400] border-2 border-white shadow-md hover:scale-110 transition-transform"
+                    onclick="window.setColor('#006400')" title="สีเขียว (Green)"></button>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#1e3a8a] border-2 border-white shadow-md hover:scale-110 transition-transform"
+                    onclick="window.setColor('#1e3a8a')" title="สีน้ำเงิน (Blue)"></button>
+            </div>
+        </div>
+
+        <div class="mt-6 text-xs text-gray-400 text-center">
+            *คลิกซ้ายลากเพื่อหมุนดูชิ้นงาน
+        </div>
+    </div>
+
+    <!-- หน้าต่างเลือกสีแบบ Classic (ซ่อนไว้เป็นค่าเริ่มต้น) -->
+    <div id="classicColorModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center">
+        <!-- Backdrop เพื่อกันคลิกทะลุ -->
+        <div class="absolute inset-0 bg-black/20" onclick="window.closeClassicDialog()"></div>
+
+        <!-- ตัวกล่องหน้าต่าง -->
+        <div class="classic-dialog relative p-2 w-[530px] flex flex-col">
+            <!-- Header Window -->
+            <div class="flex justify-between items-center pb-2 px-1">
+                <span class="text-[13px] text-gray-800 font-medium">เลือกสีสำหรับชิ้นงาน</span>
+                <button onclick="window.closeClassicDialog()"
+                    class="hover:bg-red-500 hover:text-white rounded px-2 py-0.5 text-lg leading-none transition-colors">&times;</button>
+            </div>
+
+            <div class="flex gap-4 p-2 bg-white/50 border border-gray-200 rounded">
+                <!-- ฝั่งซ้าย (พาเลตสี) -->
+                <div class="flex flex-col w-[210px]">
+                    <div class="text-[12px] mb-1">Basic colors:</div>
+                    <div id="basicColorGrid" class="grid grid-cols-8 gap-x-[3px] gap-y-[4px] mb-4 pl-1">
+                        <!-- กล่องสีจะถูกสร้างด้วย JS -->
+                    </div>
+
+                    <div class="text-[12px] mb-1">Custom colors:</div>
+                    <div id="customColorGrid" class="grid grid-cols-8 gap-x-[3px] gap-y-[4px] mb-4 pl-1">
+                        <!-- กล่องสี Custom -->
+                    </div>
+
+                    <button class="classic-btn w-full mb-4">Define Custom Colors &gt;&gt;</button>
+
+                    <div class="flex gap-2 mt-auto">
+                        <button onclick="window.confirmClassicColor()" class="classic-btn flex-1 py-1">OK</button>
+                        <button onclick="window.closeClassicDialog()" class="classic-btn flex-1 py-1">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- ฝั่งขวา (จานสีแบบไล่เฉด) -->
+                <div class="flex flex-col flex-1 pl-2 border-l border-gray-300">
+                    <div class="flex gap-3 h-[180px] mb-4 relative">
+                        <!-- แผนผัง Hue/Sat -->
+                        <div id="hueSatMap"
+                            class="flex-1 relative border border-gray-400 overflow-hidden cursor-crosshair"
+                            style="background: linear-gradient(to bottom, transparent, #808080), linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-gray-500/50 to-transparent mix-blend-multiply pointer-events-none">
+                            </div>
+                            <!-- เป้าเล็งสี (Cursor) -->
+                            <div id="hueSatCursor"
+                                class="absolute w-4 h-4 border-2 border-black rounded-full top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
+                            </div>
+                        </div>
+
+                        <!-- แถบ Luminance (ความสว่าง) -->
+                        <div id="lumSlider" class="w-[20px] relative border border-gray-400 cursor-ns-resize"
+                            style="background: linear-gradient(to bottom, #ffffff, #ff0000, #000000);">
+                            <!-- ลูกศรชี้ระดับความสว่าง -->
+                            <div id="lumArrow"
+                                class="absolute right-0 top-[50%] w-0 h-0 border-y-[5px] border-y-transparent border-r-[6px] border-r-black -translate-y-1/2 translate-x-full pointer-events-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ส่วนแสดงค่าสีและ Input -->
+                    <div class="flex justify-between items-end">
+                        <div class="flex flex-col items-center pl-2">
+                            <div id="dialogColorPreview"
+                                class="w-14 h-12 border border-gray-500 shadow-inner bg-[#cccccc] mb-1"></div>
+                            <span class="text-[11px]">Color|Solid</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-x-2 gap-y-1 items-center text-[12px]">
+                            <span class="text-right">Hue:</span>
+                            <input type="number" id="inp-h" class="classic-input w-10 text-right" disabled>
+                            <span class="text-right">Sat:</span>
+                            <input type="number" id="inp-s" class="classic-input w-10 text-right" disabled>
+                            <span class="text-right">Lum:</span>
+                            <input type="number" id="inp-l" class="classic-input w-10 text-right" disabled>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-x-2 gap-y-1 items-center text-[12px]">
+                            <span class="text-right">Red:</span>
+                            <input type="number" id="inp-r" class="classic-input w-10 text-right">
+                            <span class="text-right">Green:</span>
+                            <input type="number" id="inp-g" class="classic-input w-10 text-right">
+                            <span class="text-right">Blue:</span>
+                            <input type="number" id="inp-b" class="classic-input w-10 text-right">
+                        </div>
+                    </div>
+
+                    <button onclick="window.addToCustomColors()" class="classic-btn w-full mt-4">Add to Custom
+                        Colors</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ✅ เพิ่มแท็กปิดของ classicColorModal ตรงนี้ครับ! -->
+
+    <!-- ✅ เพิ่มส่วนแสดงความยาวรวม (ซ้ายล่าง) -->
+    <div
+        class="absolute bottom-6 left-6 z-10 bg-white/90 backdrop-blur px-5 py-3 rounded-xl shadow-lg border border-gray-200 pointer-events-none flex flex-col transition-all">
+        <span class="text-xs text-gray-500 font-semibold mb-0.5">ความยาวรวมแผ่นเรียบ (Girth)</span>
+        <div class="flex items-baseline gap-1">
+            <span id="totalLengthText" class="text-3xl font-bold text-gray-800 tracking-tight">0.0</span>
+            <span class="text-sm font-medium text-gray-600">ซม.</span>
+        </div>
+    </div>
+
+    <!-- ปุ่มซูม (ขวาล่าง) -->
+    <div class="absolute bottom-6 right-6 z-10 flex flex-col gap-3">
+        <button id="zoomInBtn"
+            class="bg-white/90 backdrop-blur w-12 h-12 rounded-full shadow-md border border-gray-200 text-gray-700 hover:text-blue-600 hover:border-blue-500 hover:scale-105 flex items-center justify-center transition-all"
+            title="ซูมเข้า (+)">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+        </button>
+        <button id="zoomOutBtn"
+            class="bg-white/90 backdrop-blur w-12 h-12 rounded-full shadow-md border border-gray-200 text-gray-700 hover:text-blue-600 hover:border-blue-500 hover:scale-105 flex items-center justify-center transition-all"
+            title="ซูมออก (-)">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- สคริปต์จัดการหน้าต่างสี Classic -->
+    <script>
+        // ชุดสีมาตรฐานของ Windows (48 สี)
+        const classicBasicColors = [
+            '#FF8080', '#FFFF80', '#80FF80', '#00FF80', '#80FFFF', '#0080FF', '#FF80C0', '#FF80FF',
+            '#FF0000', '#FFFF00', '#80FF00', '#00FF40', '#00FFFF', '#0080C0', '#8080C0', '#FF00FF',
+            '#804040', '#FF8040', '#00FF00', '#008080', '#004080', '#8080FF', '#800040', '#FF0080',
+            '#800000', '#FF8000', '#008000', '#008040', '#0000FF', '#0000A0', '#800080', '#8000FF',
+            '#400000', '#804000', '#004000', '#004040', '#000080', '#000040', '#400040', '#400080',
+            '#000000', '#808000', '#808040', '#808080', '#408080', '#C0C0C0', '#400040', '#FFFFFF'
+        ];
+
+        let currentSelectedHexInDialog = '#CCCCCC';
+        let currentH = 0, currentS = 0, currentL = 0.5;
+
+        // ฟังก์ชันคำนวณสี HSL <-> RGB
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s === 0) { r = g = b = l; } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1; if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1 / 3);
+            }
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) { h = s = 0; } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return [h, s, l];
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1).toUpperCase();
+        }
+
+        function hexToRgb(hex) {
+            let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : [204, 204, 204];
+        }
+
+        // อัปเดตการแสดงผล (UI) เมื่อคำนวณสี
+        function updateFromHSL() {
+            // เปลี่ยนสีพื้นหลังแถบความสว่างให้ตรงกับสีที่เลือก
+            const sliderBg = `linear-gradient(to bottom, #ffffff, hsl(${currentH}, ${currentS * 100}%, 50%), #000000)`;
+            document.getElementById('lumSlider').style.background = sliderBg;
+
+            // คำนวณ RGB และรหัส Hex
+            const rgb = hslToRgb(currentH / 360, currentS, currentL);
+            currentSelectedHexInDialog = rgbToHex(rgb[0], rgb[1], rgb[2]);
+
+            // อัปเดตกล่องตัวอย่างสี
+            document.getElementById('dialogColorPreview').style.backgroundColor = currentSelectedHexInDialog;
+
+            // อัปเดตตัวเลขในช่อง (แปลงสเกล HSL ให้อยู่ในระยะ 0-240 แบบ Windows Classic)
+            document.getElementById('inp-h').value = Math.round((currentH / 360) * 240);
+            document.getElementById('inp-s').value = Math.round(currentS * 240);
+            document.getElementById('inp-l').value = Math.round(currentL * 240);
+            document.getElementById('inp-r').value = rgb[0];
+            document.getElementById('inp-g').value = rgb[1];
+            document.getElementById('inp-b').value = rgb[2];
+
+            // ขยับเป้าเล็งสี (Cursor) และลูกศร
+            document.getElementById('hueSatCursor').style.left = `${(currentH / 360) * 100}%`;
+            document.getElementById('hueSatCursor').style.top = `${(1 - currentS) * 100}%`;
+            document.getElementById('lumArrow').style.top = `${(1 - currentL) * 100}%`;
+        }
+
+        function setFromHex(hex) {
+            const rgb = hexToRgb(hex);
+            const hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
+            currentH = hsl[0] * 360;
+            currentS = hsl[1];
+            currentL = hsl[2];
+            updateFromHSL();
+        }
+
+        // สร้างตารางสี Basic
+        const basicGrid = document.getElementById('basicColorGrid');
+        classicBasicColors.forEach((hex, index) => {
+            const box = document.createElement('div');
+            box.className = 'color-box basic-color-box';
+            box.style.backgroundColor = hex;
+            box.onclick = () => window.selectColorInDialog(hex, box);
+            basicGrid.appendChild(box);
+        });
+
+        // สร้างตารางสี Custom
+        const customGrid = document.getElementById('customColorGrid');
+        for (let i = 0; i < 16; i++) {
+            const box = document.createElement('div');
+            box.className = 'color-box custom-color-box bg-white';
+            customGrid.appendChild(box);
+        }
+
+        // ระบบคลิกลากบนตารางสีรุ้ง (Hue/Sat)
+        const map = document.getElementById('hueSatMap');
+        let isMapDragging = false;
+        function handleMapMove(e) {
+            if (!isMapDragging) return;
+            const rect = map.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+            x = Math.max(0, Math.min(x, rect.width));
+            y = Math.max(0, Math.min(y, rect.height));
+            currentH = (x / rect.width) * 360;
+            currentS = 1 - (y / rect.height);
+            updateFromHSL();
+            document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
+        }
+        map.addEventListener('mousedown', (e) => { isMapDragging = true; handleMapMove(e); });
+
+        // ระบบคลิกลากบนแถบความสว่าง (Luminance)
+        const slider = document.getElementById('lumSlider');
+        let isSliderDragging = false;
+        function handleSliderMove(e) {
+            if (!isSliderDragging) return;
+            const rect = slider.getBoundingClientRect();
+            let y = e.clientY - rect.top;
+            y = Math.max(0, Math.min(y, rect.height));
+            currentL = 1 - (y / rect.height);
+            updateFromHSL();
+            document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
+        }
+        slider.addEventListener('mousedown', (e) => { isSliderDragging = true; handleSliderMove(e); });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isMapDragging) handleMapMove(e);
+            if (isSliderDragging) handleSliderMove(e);
+        });
+        window.addEventListener('mouseup', () => {
+            isMapDragging = false;
+            isSliderDragging = false;
+        });
+
+        // อัปเดตสีเมื่อพิมพ์แก้ไขค่า RGB
+        ['inp-r', 'inp-g', 'inp-b'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                let r = parseInt(document.getElementById('inp-r').value) || 0;
+                let g = parseInt(document.getElementById('inp-g').value) || 0;
+                let b = parseInt(document.getElementById('inp-b').value) || 0;
+                setFromHex(rgbToHex(Math.min(255, Math.max(0, r)), Math.min(255, Math.max(0, g)), Math.min(255, Math.max(0, b))));
+            });
+        });
+
+        // ฟังก์ชันเมื่อคลิกเลือกสีตายตัวจากช่องตาราง
+        window.selectColorInDialog = function (hex, element) {
+            document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
+            if (element) element.classList.add('selected');
+            setFromHex(hex);
+        };
+
+        // ฟังก์ชันเพิ่มสีลงช่อง Custom
+        let customColorIndex = 0;
+        window.addToCustomColors = function () {
+            const customBoxes = document.querySelectorAll('.custom-color-box');
+            if (customBoxes[customColorIndex]) {
+                const box = customBoxes[customColorIndex];
+                box.style.backgroundColor = currentSelectedHexInDialog;
+                box.dataset.hex = currentSelectedHexInDialog;
+                box.onclick = () => window.selectColorInDialog(box.dataset.hex, box);
+                window.selectColorInDialog(currentSelectedHexInDialog, box);
+                customColorIndex = (customColorIndex + 1) % 16;
+            }
+        };
+
+        // ผูกปุ่มเปิด/ปิดหน้าต่าง
+        const modal = document.getElementById('classicColorModal');
+        const openBtn = document.getElementById('openColorDialogBtn');
+
+        openBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            // เริ่มต้นหน้าต่างด้วยสีปัจจุบันของโมเดล
+            setFromHex(window.currentSelectedHexInDialog || '#CCCCCC');
+        });
+
+        window.closeClassicDialog = function () {
+            modal.classList.add('hidden');
+        };
+
+        window.confirmClassicColor = function () {
+            // ส่งค่าสีกลับไปให้ Three.js ผ่านฟังก์ชัน setColor
+            window.setColor(currentSelectedHexInDialog);
+            window.closeClassicDialog();
+        };
+    </script>
+
+    <!-- สคริปต์ 3D -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+        // 1. ตั้งค่า Scene, Camera, Renderer
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // ปรับมุมกล้องให้อยู่ด้านหน้าเฉียงๆ เพื่อให้เห็นรูปด้านข้างตามที่คุณวาดมาได้ชัดเจนที่สุด
+        camera.position.set(15, 10, 35);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // 2. จัดแสงและสภาพแวดล้อม (ให้ดูสมจริงเป็นเนื้อโลหะ)
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+
+        // 3. สร้างรูปทรง (Geometry) ตามสัดส่วนในภาพ
+        function createFlashingGeometry(params) {
+            // สัดส่วนจากภาพ (ซม.) หรือจาก UI
+            const t = 0.2; // ความหนาของแผ่นเหล็ก
+            const hBack = params ? params.hBack : 10.0; // ขอบหลังแนวตั้ง
+            const wTop = params ? params.wTop : 11.4; // ขอบบนแนวนอน
+            const lSlant = params ? params.lSlant : 4.0; // ความยาวขอบเอียง
+            const angleSlant = -45 * (Math.PI / 180); // มุมเอียง 45 องศา
+            const wBottom = params ? params.wBottom : 2.5; // ขอบล่างแนวนอน
+            const hLip = params ? params.hLip : 2.5; // ขอบพับลงด้านล่างสุด
+
+            // --- 1. กำหนดจุดขอบด้านใน (Inner Profile) ตามเส้นรูปวาด ---
+            const p_in_3 = new THREE.Vector2(0, hBack);
+            const p_in_2 = new THREE.Vector2(0, 0);
+            const p_in_1 = new THREE.Vector2(wBottom, 0);
+            const p_in_0 = new THREE.Vector2(wBottom, -hLip);
+
+            const p_in_4 = new THREE.Vector2(wTop, hBack);
+            const p_in_5 = new THREE.Vector2(wTop + lSlant * Math.cos(angleSlant), hBack + lSlant * Math.sin(angleSlant));
+
+            // --- 2. กำหนดจุดขอบด้านนอก (Outer Profile) โดยบวกความหนา t อย่างถูกต้อง ---
+            // ป้องกันปัญหาพิกัดเส้นซ้อนทับกัน (Self-intersection) ที่ทำให้เกิดแผ่นปิดข้าง
+            const p_out_0 = new THREE.Vector2(wBottom - t, -hLip);
+            const p_out_1 = new THREE.Vector2(wBottom - t, -t);
+            const p_out_2 = new THREE.Vector2(-t, -t);
+            const p_out_3 = new THREE.Vector2(-t, hBack + t);
+
+            // คำนวณจุดขอบนอกสำหรับปีกเอียง
+            const nx = Math.cos(angleSlant + Math.PI / 2);
+            const ny = Math.sin(angleSlant + Math.PI / 2);
+            const p_out_5 = new THREE.Vector2(p_in_5.x + t * nx, p_in_5.y + t * ny);
+
+            // หาจุดตัดมุมของเส้นบนสุด กับเส้นเอียงด้านนอก
+            const y4 = hBack + t;
+            const m = Math.tan(angleSlant);
+            const x4 = p_out_5.x + (y4 - p_out_5.y) / m;
+            const p_out_4 = new THREE.Vector2(x4, y4);
+
+            // วาดเส้นรูปร่าง
+            const shape = new THREE.Shape();
+            shape.moveTo(p_in_5.x, p_in_5.y);
+            shape.lineTo(p_in_4.x, p_in_4.y);
+            shape.lineTo(p_in_3.x, p_in_3.y);
+            shape.lineTo(p_in_2.x, p_in_2.y);
+            shape.lineTo(p_in_1.x, p_in_1.y);
+            shape.lineTo(p_in_0.x, p_in_0.y);
+
+            // วนกลับเส้นด้านนอก
+            shape.lineTo(p_out_0.x, p_out_0.y);
+            shape.lineTo(p_out_1.x, p_out_1.y);
+            shape.lineTo(p_out_2.x, p_out_2.y);
+            shape.lineTo(p_out_3.x, p_out_3.y);
+            shape.lineTo(p_out_4.x, p_out_4.y);
+            shape.lineTo(p_out_5.x, p_out_5.y);
+            shape.closePath();
+
+            // Extrude (ยืดรูปร่าง 2D ให้เป็น 3D)
+            const extrudeSettings = {
+                depth: 25,
+                bevelEnabled: false, // ปิด Bevel เพื่อแก้ปัญหา Mesh สร้างแผ่นปิดข้างหลอกตา
+                steps: 1
+            };
+
+            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            geometry.center(); // จัดให้อยู่ตรงกลางจอ
+            return geometry;
+        }
+
+        // 4. สร้างวัสดุ (Material) เนื้อสแตนเลส/โลหะ
+        const material = new THREE.MeshStandardMaterial({
+            color: 0xcccccc, // สีเริ่มต้น (สีเงิน)
+            metalness: 0.8,
+            roughness: 0.35,
+            side: THREE.DoubleSide
+        });
+
+        // Setup initial values based on URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileId = urlParams.get('id');
+
+        if (profileId === '5') {
+            document.title = "3D Model - ครอบข้างตรง5 457";
+            document.querySelector("h1.text-xl").innerText = "ตั้งค่าโมเดล (ครอบข้างตรง5 457)";
+            document.getElementById('dimWTop').value = "26.7";
+            document.getElementById('dimHBack').value = "10.0";
+            document.getElementById('dimLSlant').value = "4.0";
+            document.getElementById('dimWBottom').value = "2.5";
+            document.getElementById('dimHLip').value = "2.5";
+        } else if (profileId === '6') {
+            document.title = "3D Model - ครอบข้างตรง8 457";
+            document.querySelector("h1.text-xl").innerText = "ตั้งค่าโมเดล (ครอบข้างตรง8 457)";
+            document.getElementById('dimWTop').value = "18.7";
+            document.getElementById('dimHBack').value = "18.0";
+            document.getElementById('dimLSlant').value = "4.0";
+            document.getElementById('dimWBottom').value = "2.5";
+            document.getElementById('dimHLip').value = "2.5";
+        }
+
+        const initialParams = {
+            wTop: parseFloat(document.getElementById('dimWTop').value) || 0.1,
+            hBack: parseFloat(document.getElementById('dimHBack').value) || 0.1,
+            lSlant: parseFloat(document.getElementById('dimLSlant').value) || 0.1,
+            wBottom: parseFloat(document.getElementById('dimWBottom').value) || 0.1,
+            hLip: parseFloat(document.getElementById('dimHLip').value) || 0.1
+        };
+
+        // --- ฟังก์ชันคำนวณและอัปเดตความยาวรวม (ซ้ายล่าง) สำหรับ 5 ตัวแปร ---
+        function updateTotalLengthDisplay() {
+            const wTop = parseFloat(document.getElementById('dimWTop').value) || 0;
+            const hBack = parseFloat(document.getElementById('dimHBack').value) || 0;
+            const lSlant = parseFloat(document.getElementById('dimLSlant').value) || 0;
+            const wBottom = parseFloat(document.getElementById('dimWBottom').value) || 0;
+            const hLip = parseFloat(document.getElementById('dimHLip').value) || 0;
+
+            // บวกค่าทั้ง 5 ส่วนเข้าด้วยกัน
+            const total = (wTop + hBack + lSlant + wBottom + hLip).toFixed(1);
+
+            // แสดงผลที่ UI
+            const displayEl = document.getElementById('totalLengthText');
+            if (displayEl) {
+                displayEl.innerText = total;
+            }
+        }
+
+        // เรียกใช้ครั้งแรกตอนโหลดหน้า
+        updateTotalLengthDisplay();
+
+        // 5. รวมรูปทรงและวัสดุเข้าด้วยกัน แล้วเพิ่มลงในฉาก
+        const flashingMesh = new THREE.Mesh(createFlashingGeometry(initialParams), material);
+        // ปรับองศาการวางให้หันหน้าเห็น Profile ชัดๆ ตามรูปวาด
+        flashingMesh.rotation.y = -Math.PI / 10;
+        scene.add(flashingMesh);
+
+        // 6. เพิ่มตัวควบคุมเมาส์ (หมุนอย่างเดียว)
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = false; // ปิดการซูมเข้า-ออก
+        controls.enablePan = false;  // ปิดการเลื่อนแพน (ล็อกชิ้นงานให้อยู่ตรงกลางเสมอ)
+
+        // เพิ่มการหมุนอัตโนมัติ
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 1.5; // ความเร็วในการหมุน (สามารถปรับตัวเลขได้)
+
+        // 7. ลูปสำหรับเรนเดอร์ภาพเคลื่อนไหว
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update(); // จำเป็นต้องมี update เพื่อให้ autoRotate ทำงาน
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // --- การจัดการซูมผ่านปุ่ม ---
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        if (zoomInBtn && zoomOutBtn) {
+            zoomInBtn.addEventListener('click', () => {
+                camera.zoom = Math.min(5, camera.zoom * 1.2);
+                camera.updateProjectionMatrix();
+            });
+            zoomOutBtn.addEventListener('click', () => {
+                camera.zoom = Math.max(0.2, camera.zoom / 1.2);
+                camera.updateProjectionMatrix();
+            });
+        }
+
+        // --- การจัดการ UI และการโต้ตอบ ---
+        const openColorDialogBtn = document.getElementById('openColorDialogBtn');
+        const colorHex = document.getElementById('colorHex');
+
+        // การเปิด-ปิดแผงตั้งค่า
+        const controlPanel = document.getElementById('controlPanel');
+        const openPanelBtn = document.getElementById('openPanelBtn');
+        const closePanelBtn = document.getElementById('closePanelBtn');
+
+        openPanelBtn.addEventListener('click', () => {
+            controlPanel.classList.remove('hidden');
+            openPanelBtn.classList.add('hidden');
+        });
+
+        closePanelBtn.addEventListener('click', () => {
+            controlPanel.classList.add('hidden');
+            openPanelBtn.classList.remove('hidden');
+        });
+
+        // ฟังก์ชันอัพเดทสี (เมื่อกดตกลงจากหน้าต่าง หรือกดสีลัด)
+        window.setColor = function (hexColor) {
+            openColorDialogBtn.style.backgroundColor = hexColor;
+            colorHex.innerText = hexColor.toUpperCase();
+            material.color.set(hexColor);
+            window.currentSelectedHexInDialog = hexColor; // อัพเดตค่าใน dialog ด้วย
+        };
+
+        // --- การจัดการขนาด (Dimensions) ---
+        const dimInputs = ['dimWTop', 'dimHBack', 'dimLSlant', 'dimWBottom', 'dimHLip'];
+
+        function updateGeometry() {
+            const params = {
+                wTop: parseFloat(document.getElementById('dimWTop').value) || 0.1,
+                hBack: parseFloat(document.getElementById('dimHBack').value) || 0.1,
+                lSlant: parseFloat(document.getElementById('dimLSlant').value) || 0.1,
+                wBottom: parseFloat(document.getElementById('dimWBottom').value) || 0.1,
+                hLip: parseFloat(document.getElementById('dimHLip').value) || 0.1
+            };
+
+            // ลบ Geometry เก่าออกจากหน่วยความจำเพื่อคืนพื้นที่
+            flashingMesh.geometry.dispose();
+            // สร้าง Geometry ใหม่ด้วยค่าที่อัพเดตและใส่เข้าไปใน Mesh เดิม
+            flashingMesh.geometry = createFlashingGeometry(params);
+
+            // ✅ อัปเดตตัวเลขความยาวรวมที่มุมซ้ายล่างเมื่อมีการแก้ขนาด
+            updateTotalLengthDisplay();
+        }
+
+        // เพิ่ม Event Listener ให้กับทุกช่องใส่ขนาด
+        dimInputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', updateGeometry);
+        });
+
+        // รองรับการย่อขยายหน้าจอ
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+
+</html>
