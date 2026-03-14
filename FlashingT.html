@@ -4,49 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sangthai Flashing Design | แบบมาตรฐานครอบเมทัลชีท</title>
+    <title>Sangthai Flashing Design | Vibrant Liquid Glass (Optimized)</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Default Light Theme */
+        /* =========================================
+           VIBRANT LIQUID GLASS (PERFORMANCE OPTIMIZED)
+           ========================================= */
         :root {
-            --primary: #f5a623;
-            --primary-glow: rgba(245, 166, 35, 0.3);
-            --secondary: #4a90e2;
-            --secondary-glow: rgba(74, 144, 226, 0.3);
-            --bg-dark: #f0f4f8;
-            --surface: rgba(255, 255, 255, 0.85);
-            --surface-hover: rgba(255, 255, 255, 1);
-            --border: rgba(0, 0, 0, 0.1);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --modal-bg: #ffffff;
-            --card-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05);
-            --card-shadow-hover: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            --modal-img-bg: #f8fafc;
-            --logo-bg: #ffffff;
-            --card-image-bg: rgba(0, 0, 0, 0.05);
-            --text-inverse: #ffffff;
+            /* Light / Daydream Mode */
+            --primary: #ff6b6b;
+            --primary-glow: rgba(255, 107, 107, 0.6);
+            --secondary: #4facfe;
+            --secondary-glow: rgba(79, 172, 254, 0.6);
+            --accent: #f6d365;
+            --accent-glow: rgba(246, 211, 101, 0.6);
+            
+            --bg-base: #fdfbfb;
+            --surface: rgba(255, 255, 255, 0.5);
+            --surface-hover: rgba(255, 255, 255, 0.85);
+            --surface-border: rgba(255, 255, 255, 0.8);
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            
+            --modal-bg: rgba(255, 255, 255, 0.9);
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            --card-shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+            --tag-bg: rgba(255, 255, 255, 0.8);
         }
 
-        /* Dark Theme Settings */
         [data-theme="dark"] {
-            --primary: #f5a623;
-            --primary-glow: rgba(245, 166, 35, 0.4);
-            --secondary: #4a90e2;
-            --secondary-glow: rgba(74, 144, 226, 0.4);
-            --bg-dark: #0a0f1c;
-            --surface: rgba(18, 26, 47, 0.6);
-            --surface-hover: rgba(26, 37, 65, 0.8);
-            --border: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --modal-bg: #0a0f1c;
-            --card-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
-            --card-shadow-hover: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            --modal-img-bg: #000000;
-            --logo-bg: #ffffff;
-            --card-image-bg: rgba(0, 0, 0, 0.3);
-            --text-inverse: #ffffff;
+            /* Dark / Aurora Mode */
+            --primary: #ff0844;
+            --primary-glow: rgba(255, 8, 68, 0.4);
+            --secondary: #00b4db;
+            --secondary-glow: rgba(0, 180, 219, 0.4);
+            --accent: #8e2de2;
+            --accent-glow: rgba(142, 45, 226, 0.4);
+            
+            --bg-base: #0a0c10;
+            --surface: rgba(20, 25, 35, 0.4);
+            --surface-hover: rgba(30, 40, 60, 0.7);
+            --surface-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f5f6fa;
+            --text-muted: #a4b0be;
+            
+            --modal-bg: rgba(15, 20, 30, 0.95);
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+            --card-shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+            --tag-bg: rgba(0, 0, 0, 0.5);
         }
 
         * {
@@ -58,26 +63,55 @@
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-base);
             color: var(--text-main);
-            min-height: 100vh; /* Changed from height:100vh for mobile scroll */
+            min-height: 100vh;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            background-image:
-                radial-gradient(circle at 0% 0%, var(--secondary-glow), transparent 35%),
-                radial-gradient(circle at 100% 100%, var(--primary-glow), transparent 35%);
-            background-attachment: fixed;
-            background-size: cover;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
         }
 
-        .glass {
-            background: var(--surface);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.2);
+        /* ----- Liquid Mesh Background (Optimized) ----- */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            background: var(--bg-base);
+        }
+
+        .liquid-blob {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: drift 20s infinite alternate linear;
+            will-change: transform;
+        }
+
+        .blob-pink { 
+            top: -20%; left: -10%; width: 60vw; height: 60vw; 
+            background: radial-gradient(circle closest-side, var(--primary-glow), transparent);
+        }
+        .blob-blue { 
+            bottom: -20%; right: -10%; width: 70vw; height: 70vw; 
+            background: radial-gradient(circle closest-side, var(--secondary-glow), transparent);
+            animation-delay: -5s; 
+            animation-direction: alternate-reverse; 
+        }
+        .blob-yellow { 
+            top: 20%; left: 30%; width: 50vw; height: 50vw; 
+            background: radial-gradient(circle closest-side, var(--accent-glow), transparent);
+            animation-delay: -10s; 
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(8vw, 8vh) scale(1.1); }
+            66% { transform: translate(-8vw, 12vh) scale(0.9); }
+            100% { transform: translate(-4vw, -4vh) scale(1.05); }
         }
 
         /* ----- Navbar ----- */
@@ -85,134 +119,148 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 5%;
+            padding: 15px 5%;
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10, 15, 28, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--surface-border);
         }
+        [data-theme="dark"] nav { background: rgba(0, 0, 0, 0.1); }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            background: linear-gradient(45deg, var(--text-main), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .logo-img {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
-            border-radius: 8px;
-            background: var(--logo-bg);
-            padding: 2px;
-            box-shadow: 0 0 15px var(--primary-glow);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 3px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        .logo span { color: var(--primary); }
 
         .theme-btn {
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1px solid var(--surface-border);
             color: var(--text-main);
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            flex-shrink: 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .theme-btn:hover {
+            transform: scale(1.05);
+            background: var(--text-main);
+            color: var(--bg-base);
         }
 
         /* ----- Hero Section ----- */
         .hero {
             text-align: center;
-            padding: 40px 20px 20px;
+            padding: 60px 20px 30px;
             max-width: 900px;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
 
         .hero h1 {
             font-size: 3rem;
             line-height: 1.2;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, var(--text-main), var(--text-muted), var(--primary));
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+        
+        .hero h1 span { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: inline-block;
         }
 
         .hero p {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
-            margin-bottom: 25px;
+            margin-bottom: 35px;
+            font-weight: 400;
+            max-width: 600px;
+            margin-inline: auto;
         }
 
-        /* ----- Filter Tabs ----- */
+        /* ----- Filter Tabs (Glass Pills) ----- */
         .filters {
             display: flex;
-            justify-content: flex-start;
-            gap: 12px;
-            margin-bottom: 10px;
+            justify-content: flex-start; /* Changed for mobile scroll */
+            gap: 10px;
+            margin-bottom: 20px;
             overflow-x: auto;
             flex-wrap: nowrap;
-            padding: 5px 20px 15px;
-            margin: 0 -20px; /* Pull to edges on mobile */
+            padding: 10px 5px 20px;
             -webkit-overflow-scrolling: touch;
-            scroll-snap-type: x mandatory;
             scrollbar-width: none;
         }
+        @media (min-width: 769px) { .filters { justify-content: center; } }
         .filters::-webkit-scrollbar { display: none; }
-        
-        .filters::before, .filters::after {
-            content: '';
-            flex: 0 0 5px; /* Spacing at ends for mobile scroll */
-        }
 
         .filter-btn {
             flex-shrink: 0;
             padding: 10px 24px;
             border-radius: 30px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text-muted);
+            border: 1px solid var(--surface-border);
+            background: var(--surface);
+            color: var(--text-main);
             font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            scroll-snap-align: start;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            backdrop-filter: blur(8px);
         }
+
+        .filter-btn:hover { background: var(--surface-hover); }
 
         .filter-btn.active {
-            background: var(--primary);
-            color: var(--text-inverse);
+            background: var(--text-main);
+            color: var(--bg-base);
             font-weight: 600;
-            border-color: var(--primary);
-            box-shadow: 0 4px 15px var(--primary-glow);
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* ----- Grid Layout (Changed to CSS Grid for Mobile UI) ----- */
+        /* ----- Grid Layout ----- */
         .container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
-            padding: 0 20px 40px;
+            padding: 0 20px 60px;
             width: 100%;
+            position: relative;
+            z-index: 10;
         }
 
         .flashing-grid {
             display: grid;
+            /* Update: More robust grid for mobile & tablet */
             grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-            gap: 20px;
+            gap: 25px;
             padding: 10px 0;
             width: 100%;
         }
@@ -220,178 +268,193 @@
         /* ----- Flashing Card ----- */
         .card {
             width: 100%;
-            padding: 24px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 24px;
             background: var(--surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--surface-border);
             box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
+            transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            will-change: transform;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        /* Hover effects only on devices with mouse to prevent sticky states on mobile */
         @media (hover: hover) {
             .card:hover {
-                transform: translateY(-8px);
-                border-color: var(--primary);
-                box-shadow: var(--card-shadow-hover);
+                transform: translateY(-6px);
                 background: var(--surface-hover);
+                box-shadow: var(--card-shadow-hover);
             }
-            .card:hover::before { opacity: 1; }
-            .card:hover .image-placeholder { transform: scale(1.05); color: var(--primary); }
-            .card:hover .view-btn::after { transform: translateX(5px); }
-            .theme-btn:hover { color: var(--primary); border-color: var(--primary); transform: scale(1.05); }
+            .card:hover .image-placeholder img { transform: scale(1.05) translateY(-3px); }
+            .card:hover .view-btn { color: var(--secondary); font-weight: 600; padding-right: 12px; }
+            .card:hover .view-btn::after { opacity: 1; transform: translateX(5px); }
         }
 
-        .card:active {
-            transform: scale(0.98);
-        }
+        .card:active { transform: scale(0.98); }
 
         .image-placeholder {
             width: 100%;
-            height: 180px;
-            background: var(--card-image-bg);
-            border-radius: 12px;
+            height: 200px;
+            background: transparent;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--secondary);
+            color: var(--text-muted);
+            position: relative;
+            z-index: 2;
+        }
+
+        .image-placeholder::after {
+            content: '';
+            position: absolute;
+            width: 100px; height: 100px;
+            background: radial-gradient(circle closest-side, var(--secondary-glow), transparent);
+            z-index: 0;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+        @media (hover: hover) {
+            .card:hover .image-placeholder::after { opacity: 0.6; transform: scale(1.3); background: radial-gradient(circle closest-side, var(--primary-glow), transparent); }
+        }
+
+        .image-placeholder img {
+            width: 100%; height: 100%;
+            object-fit: contain;
             transition: transform 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
 
         .card h3 {
             font-size: 1.25rem;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: var(--text-main);
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
         }
 
         .card p {
             color: var(--text-muted);
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.6;
             flex-grow: 1;
+            position: relative;
+            z-index: 2;
         }
 
         .card-footer {
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 0.9rem;
-            border-top: 1px solid var(--border);
-            padding-top: 15px;
+            position: relative;
+            z-index: 2;
         }
 
         .category-tag {
-            background: rgba(43, 101, 236, 0.15);
-            color: #4a90e2;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            background: var(--tag-bg);
+            border: 1px solid var(--surface-border);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
 
         .view-btn {
-            color: var(--primary);
+            color: var(--text-muted);
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 5px;
+            transition: all 0.2s ease;
+            position: relative;
         }
-        .view-btn::after { content: '→'; transition: transform 0.3s; }
+        .view-btn::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
 
-        /* ----- Modal ----- */
+        /* ----- Modal Layering ----- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
             padding: 15px;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
 
         .modal-content {
             width: 100%;
             max-width: 900px;
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 20px;
+            background: var(--modal-bg);
+            border-radius: 24px;
+            border: 1px solid var(--surface-border);
             position: relative;
-            transform: translateY(30px) scale(0.95);
-            transition: all 0.3s;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            transform: scale(0.98) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
-            overflow-y: auto; /* Fix: Allow scrolling inside modal for mobile */
-            max-height: 90vh; /* Fix: Don't let modal exceed screen */
+            overflow: hidden;
+            max-height: 90vh;
         }
 
-        .modal-overlay.active .modal-content {
-            transform: translateY(0) scale(1);
-        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
 
         .close-modal {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            width: 36px;
-            height: 36px;
+            top: 20px; right: 20px;
+            background: var(--bg-base);
+            border: 1px solid var(--surface-border);
+            color: var(--text-main);
+            width: 40px; height: 40px;
             border-radius: 50%;
             font-size: 1.2rem;
             cursor: pointer;
             z-index: 20;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
         }
+        .close-modal:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         .modal-img-wrapper {
-            background: var(--modal-img-bg);
-            height: 45vh; /* Adjusted for mobile view */
+            height: 40vh;
             min-height: 250px;
             width: 100%;
             position: relative;
-            overflow: hidden;
+            background: radial-gradient(circle at 50% 120%, var(--secondary-glow) 0%, transparent 80%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
         }
 
         #modalImageContainer {
             width: 100%; height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s linear;
+            padding: 30px;
         }
 
         .modal-img-wrapper img, #modalImageContainer img {
@@ -401,106 +464,143 @@
 
         .zoom-controls {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
-            display: flex;
-            gap: 8px;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 10px;
             z-index: 10;
+            background: var(--surface);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--surface-border);
+            backdrop-filter: blur(10px);
         }
 
         .zoom-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
+            background: transparent;
+            border: none;
             color: var(--text-main);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .zoom-btn svg { width: 18px; height: 18px; stroke-width: 2.5; }
-
-        .modal-details {
-            padding: 24px;
-            flex-shrink: 0;
-            border-top: 2px solid var(--primary);
-        }
-
-        .modal-details h2 { font-size: 1.6rem; margin-bottom: 8px; color: var(--primary); }
-        .modal-details p { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; font-size: 0.95rem; }
-
-        .color-selector h3 {
-            font-size: 1rem;
-            color: var(--text-main);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .selected-color-text { font-size: 0.9rem; color: var(--primary); font-weight: 400; }
-        .color-options { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .color-swatch {
             width: 36px; height: 36px;
             border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.2);
             transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .zoom-btn:hover { background: var(--text-main); color: var(--bg-base); }
+        .zoom-btn svg { width: 20px; height: 20px; stroke-width: 2; }
+
+        .modal-details {
+            padding: 35px;
+            flex-shrink: 0;
+            overflow-y: auto;
+            background: var(--bg-base);
+            border-top: 1px solid var(--surface-border);
+        }
+
+        .modal-details h2 { font-size: 1.8rem; margin-bottom: 10px; color: var(--text-main); font-weight: 700; }
+        .modal-details p { color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; font-size: 1rem; }
+
+        .color-selector h3 {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            font-weight: 500;
+        }
+
+        .selected-color-text { color: var(--text-main); font-weight: 600; }
+        .color-options { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .color-swatch {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
         }
 
         .color-swatch.active {
-            border-color: #fff;
-            transform: scale(1.15);
-            box-shadow: 0 0 10px currentColor;
+            transform: scale(1.1) translateY(-3px);
+            border-color: var(--text-main);
+            box-shadow: 0 5px 15px currentColor;
         }
 
-        .color-swatch.active::after {
-            content: '✓'; position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); color: #fff;
-            font-size: 14px; font-weight: bold;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-        }
-        .color-swatch[data-color="#E2E8F0"].active::after { color: #0a0f1c; text-shadow: none; }
-
-        /* ----- Mobile Adjustments ----- */
+        /* =========================================
+           MOBILE OPTIMIZATIONS (The Fix)
+           ========================================= */
         @media (max-width: 768px) {
-            nav { padding: 12px 20px; }
+            /* Navbar */
+            nav { padding: 12px 15px; }
             .logo { font-size: 1.2rem; }
-            .logo-img { width: 40px; height: 40px; }
-            .hero { padding: 30px 20px 10px; }
-            .hero h1 { font-size: 2.2rem; }
-            .modal-img-wrapper { height: 35vh; } /* Make image shorter so user sees text */
-            .modal-details h2 { font-size: 1.4rem; }
-            .container { padding: 0 15px 30px; }
+            .logo-img { width: 34px; height: 34px; }
+            .theme-btn { width: 38px; height: 38px; }
+
+            /* Hero */
+            .hero { padding: 30px 15px 20px; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 0.95rem; margin-bottom: 25px; padding: 0 10px; }
+
+            /* Filters */
+            .filters { padding: 5px 15px 15px; margin: 0 -15px; }
+            .filters::before, .filters::after { content: ''; flex: 0 0 5px; }
+            .filter-btn { padding: 8px 20px; font-size: 0.9rem; }
+
+            /* Grid & Cards - Force 1 column, tighter spacing */
+            .container { padding: 0 15px 40px; }
+            .flashing-grid { grid-template-columns: 1fr; gap: 15px; }
+            .card { padding: 20px; border-radius: 20px; }
+            .image-placeholder { height: 160px; margin-bottom: 15px; }
+            .card h3 { font-size: 1.15rem; }
+            .card p { font-size: 0.85rem; }
+            .card-footer { margin-top: 15px; }
+
+            /* Modal - Tighter fits so it doesn't overflow screen */
+            .modal-overlay { padding: 10px; }
+            .modal-content { border-radius: 20px; max-height: 95vh; }
+            
+            /* Make image section smaller on mobile */
+            .modal-img-wrapper { height: 30vh; min-height: 200px; }
+            #modalImageContainer { padding: 20px; }
+            
+            /* Make text section fit better */
+            .modal-details { padding: 20px; }
+            .modal-details h2 { font-size: 1.4rem; margin-bottom: 5px; }
+            .modal-details p { font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5; }
+            .color-selector h3 { font-size: 0.9rem; margin-bottom: 10px; }
+            
+            /* Larger, easier-to-hit buttons on mobile */
+            .close-modal { top: 12px; right: 12px; width: 36px; height: 36px; font-size: 1rem; }
+            .zoom-controls { bottom: 12px; padding: 5px 12px; }
+            .zoom-btn { width: 32px; height: 32px; }
+            .zoom-btn svg { width: 18px; height: 18px; }
+            .color-swatch { width: 38px; height: 38px; border-radius: 10px; }
+            .color-options { gap: 8px; }
         }
     </style>
 </head>
 
 <body>
 
+    <!-- Liquid Background Elements -->
+    <div class="mesh-bg">
+        <div class="liquid-blob blob-pink"></div>
+        <div class="liquid-blob blob-blue"></div>
+        <div class="liquid-blob blob-yellow"></div>
+    </div>
+
     <nav>
         <div class="logo">
             <img src="logo-img.png" alt="Sangthai Logo" class="logo-img" onerror="this.src='';this.style.display='none';">
-            <div>Sangthai Flashing<span>Design</span></div>
+            <div>Sangthai <span>Flashing</span></div>
         </div>
         <button id="themeToggle" class="theme-btn" title="Toggle Theme">
-            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
+            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
         </button>
     </nav>
 
     <header class="hero">
-        <h1>แบบมาตรฐานครอบเมทัลชีท</h1>
-        <p>แสดงรายละเอียดการพับครอบ (Flashing) และเพิ่มความสวยงามให้กับตัวหลังคา</p>
+        <h1>แบบมาตรฐาน <span>ครอบเมทัลชีท</span></h1>
+        <p>นำเสนอรายละเอียดการพับครอบ (Flashing) พร้อมยกระดับความสวยงามของตัวหลังคาด้วยดีไซน์ที่ไร้ขีดจำกัด</p>
 
         <div class="filters">
             <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
@@ -511,9 +611,8 @@
     </header>
 
     <div class="container">
-        <!-- Changed to a standard responsive Grid for better Mobile UX -->
         <div class="flashing-grid" id="flashingGrid">
-            <!-- Cards will be injected by JavaScript -->
+            <!-- Cards injected via JS -->
         </div>
     </div>
 
@@ -540,12 +639,12 @@
             </div>
 
             <div class="modal-details">
-                <div class="category-tag" id="modalCategory" style="display:inline-block; margin-bottom: 10px; width: max-content;">Category</div>
+                <div class="category-tag" id="modalCategory" style="display:inline-block; margin-bottom: 15px;">Category</div>
                 <h2 id="modalTitle">ครอบชื่อ...</h2>
                 <p id="modalDesc">รายละเอียดเบื้องต้นเกี่ยวกับการใช้งานครอบตัวนี้...</p>
 
                 <div class="color-selector">
-                    <h3>เลือกสี (Color Options) <span id="selectedColorText" class="selected-color-text">ซิงคาลุม (Zincalume)</span></h3>
+                    <h3>Color Customization <span id="selectedColorText" class="selected-color-text">ซิงคาลุม (Zincalume)</span></h3>
                     <div class="color-options" id="modalColorOptions">
                         <!-- Colors injected here -->
                     </div>
@@ -556,26 +655,25 @@
 
     <script>
         const flashingData = [
-            { id: 1, title: "ครอบจั่วลอนสเปน", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบจั่วสำหรับลอนสเปน 457", image: "PhotoFlashing/ครอบจั่วลอนสเปน 457 GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
-            { id: 2, title: "ครอบจั่ว", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบจั่วมุมสำหรับหลังคา 457", image: "PhotoFlashing/ครอบจั่วมุม 457 GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
-            { id: 3, title: "ครอบสันตะเข้", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบสันตะเข้ 457", image: "PhotoFlashing/ครอบสันตะเข้ 457  GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
-            { id: 4, title: "ครอบข้างโค้ง (หน้า 5 นิ้ว)", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบโค้ง 304", image: "PhotoFlashing/ครอบข้างตรง  304  GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
-            { id: 5, title: "ครอบข้างตรง (หน้า 5 นิ้ว)", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบตรง 5 นิ้ว 457", image: "PhotoFlashing/ครอบข้างตรง5 457 GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
-            { id: 6, title: "ครอบข้างตรง 8 นิ้ว", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบตรง 8 นิ้ว 457", image: "PhotoFlashing/ครอบข้างตรง8  457 GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
-            { id: 7, title: "ครอบชนผนังปูน", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 304", image: "PhotoFlashing/ครอบชนผนังปูน 304 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
-            { id: 8, title: "ครอบชนผนังปูน", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 457", image: "PhotoFlashing/ครอบชนผนังปูน 457 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
-            { id: 9, title: "ครอบชนผนังไม้", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังไม้ 304", image: "PhotoFlashing/ครอบชนผนังไม้ 304 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
+            { id: 1, title: "ครอบจั่วลอนสเปน", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบจั่วสำหรับลอนสเปน 457 ออกแบบเพื่อรองรับรูปลอนโค้งสวยงาม", image: "PhotoFlashing/ครอบจั่วลอนสเปน 457 GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
+            { id: 2, title: "ครอบจั่ว", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบจั่วมุมสำหรับหลังคา 457 ปิดรอยต่อสันหลังคาได้อย่างมิดชิด", image: "PhotoFlashing/ครอบจั่วมุม 457 GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
+            { id: 3, title: "ครอบสันตะเข้", category: "roof", categoryLabel: "งานหลังคา", desc: "ครอบสันตะเข้ 457 สำหรับหลังคาทรงปั้นหยา ระบายน้ำได้ดีเยี่ยม", image: "PhotoFlashing/ครอบสันตะเข้ 457  GEN.png", icon: "<path d='M3 10L12 3l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z'></path>" },
+            { id: 4, title: "ครอบข้างโค้ง (หน้า 5 นิ้ว)", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบโค้ง 304 ให้ความรู้สึกนุ่มนวล", image: "PhotoFlashing/ครอบข้างตรง  304  GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
+            { id: 5, title: "ครอบข้างตรง (หน้า 5 นิ้ว)", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบตรง 5 นิ้ว 457 สไตล์เรียบหรู", image: "PhotoFlashing/ครอบข้างตรง5 457 GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
+            { id: 6, title: "ครอบข้างตรง 8 นิ้ว", category: "roof", categoryLabel: "งานหลังคา", desc: "ปิดแนวชายคาด้านข้าง แบบตรงหน้ากว้าง 8 นิ้ว 457", image: "PhotoFlashing/ครอบข้างตรง8  457 GEN.png", icon: "<path d='M4 4h16v16H4V4zm0 4h16'></path>" },
+            { id: 7, title: "ครอบชนผนังปูน", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 304 กันน้ำย้อน", image: "PhotoFlashing/ครอบชนผนังปูน 304 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
+            { id: 8, title: "ครอบชนผนังปูน", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังปูน 457 พร้อมปีกกันน้ำ", image: "PhotoFlashing/ครอบชนผนังปูน 457 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
+            { id: 9, title: "ครอบชนผนังไม้", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังไม้ 304 เข้ารูปแนบสนิท", image: "PhotoFlashing/ครอบชนผนังไม้ 304 GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
             { id: 10, title: "ครอบชนผนังไม้", category: "wall", categoryLabel: "งานผนัง", desc: "ปิดรอยต่อระหว่างหลังคากับผนังไม้ 457", image: "PhotoFlashing/ครอบชนผนังไม้ 457  GEN.png", icon: "<path d='M3 21V3h8v18M11 12h10v9'></path>" },
-            { id: 11, title: "ครอบมุมเสา", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง 304", image: "PhotoFlashing/ครอบมุมเสา 304 GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
-            { id: 12, title: "ครอบมุมเสา", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง 457", image: "PhotoFlashing/ครอบมุมเสา 457 GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
+            { id: 11, title: "ครอบมุมเสา", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง 304 เพื่อความเรียบร้อย", image: "PhotoFlashing/ครอบมุมเสา 304 GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
+            { id: 12, title: "ครอบมุมเสา", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง 457 ปกปิดรอยต่อได้อย่างสวยงาม", image: "PhotoFlashing/ครอบมุมเสา 457 GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
             { id: 13, title: "ครอบมุมเสา แบบมีปีก", category: "wall", categoryLabel: "งานผนัง", desc: "เข้ามุมเสาหรือผนัง แบบมีปีกยืด 457", image: "PhotoFlashing/ครอบมุมเสา 457 แบบมีปีก GEN.png", icon: "<path d='M8 4v16M16 4v16M4 8h16M4 16h16'></path>" },
-            { id: 14, title: "รางน้ำมาตราฐาน แบบตัว U", category: "accessories", categoryLabel: "อุปกรณ์ตกแต่ง", desc: "รางน้ำมาตรฐานตัว U 457", image: "PhotoFlashing/รางน้ำมาตราฐาน 457 แบบ ตัว U GEN.png", icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>" },
-            { id: 15, title: "รางน้ำสันตะเข้ ", category: "accessories", categoryLabel: "อุปกรณ์ตกแต่ง", desc: "รางน้ำสันตะเข้ 457", image: "PhotoFlashing/รางน้ำสันตะเข้ 457 GEN.png", icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>" },
+            { id: 14, title: "รางน้ำมาตราฐาน แบบตัว U", category: "accessories", categoryLabel: "อุปกรณ์ตกแต่ง", desc: "รางน้ำมาตรฐานตัว U 457 ระบายน้ำฝนได้อย่างรวดเร็ว", image: "PhotoFlashing/รางน้ำมาตราฐาน 457 แบบ ตัว U GEN.png", icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>" },
+            { id: 15, title: "รางน้ำสันตะเข้", category: "accessories", categoryLabel: "อุปกรณ์ตกแต่ง", desc: "รางน้ำสันตะเข้ 457 ซ่อนรอยต่อได้อย่างกลมกลืน", image: "PhotoFlashing/รางน้ำสันตะเข้ 457 GEN.png", icon: "<path d='M4 4v8a8 8 0 0 0 16 0V4'></path>" }
         ];
 
         const grid = document.getElementById("flashingGrid");
         const filterBtns = document.querySelectorAll(".filter-btn");
-
         const modal = document.getElementById("modalOverlay");
         const closeModal = document.getElementById("closeModal");
         const modalTitle = document.getElementById("modalTitle");
@@ -596,7 +694,7 @@
         function updateZoom(immediate = false) {
             const container = document.getElementById('modalImageContainer');
             if (container) {
-                container.style.transition = immediate ? 'none' : 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                container.style.transition = immediate ? 'none' : 'transform 0.2s linear';
                 container.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
                 container.style.cursor = currentZoom > 1 ? (isPanning ? 'grabbing' : 'grab') : 'default';
             }
@@ -606,9 +704,8 @@
         zoomOutBtn.addEventListener('click', (e) => { e.stopPropagation(); if (currentZoom > minZoom) { currentZoom -= zoomStep; if (currentZoom <= 1) { panX = 0; panY = 0; } updateZoom(); } });
         zoomResetBtn.addEventListener('click', (e) => { e.stopPropagation(); currentZoom = 1; panX = 0; panY = 0; updateZoom(); });
 
-        // Touch/Mouse Drag for Zoomed image
         imgWrapperElem.addEventListener('mousedown', (e) => {
-            if (currentZoom > 1 && !e.target.closest('.zoom-btn')) {
+            if (currentZoom > 1 && !e.target.closest('.zoom-controls')) {
                 e.preventDefault(); isPanning = true; startPanX = e.clientX - panX; startPanY = e.clientY - panY; updateZoom(true);
             }
         });
@@ -617,7 +714,6 @@
         });
         window.addEventListener('mouseup', () => { if (isPanning) { isPanning = false; updateZoom(true); } });
 
-        // Mobile Touch Pan (For Zoomed Image)
         imgWrapperElem.addEventListener('touchstart', (e) => {
              if (currentZoom > 1 && e.touches.length === 1) {
                 isPanning = true; startPanX = e.touches[0].clientX - panX; startPanY = e.touches[0].clientY - panY;
@@ -625,7 +721,7 @@
         }, {passive: true});
         imgWrapperElem.addEventListener('touchmove', (e) => {
              if (isPanning && currentZoom > 1 && e.touches.length === 1) {
-                 e.preventDefault(); // Prevent page scroll while panning image
+                 e.preventDefault();
                  panX = e.touches[0].clientX - startPanX; panY = e.touches[0].clientY - startPanY; updateZoom(true);
              }
         }, {passive: false});
@@ -642,24 +738,28 @@
             { name: "ดำ (Black)", hex: "#111827" }
         ];
 
-        // Render Cards
         function renderCards(filter = "all") {
             grid.innerHTML = "";
             const filteredData = filter === "all" ? flashingData : flashingData.filter(item => item.category === filter);
 
-            filteredData.forEach(item => {
+            filteredData.forEach((item, index) => {
                 const card = document.createElement("div");
-                card.className = "card glass";
+                card.className = "card";
+                card.style.animation = `floatUp 0.4s ease forwards ${index * 0.05}s`;
+                card.style.opacity = "0";
+                card.style.transform = "translateY(20px)";
+                
                 let mediaContent = item.image
-                    ? `<img src="${item.image}" alt="${item.title}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; padding: 10px;" loading="lazy">`
-                    : `<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>`;
+                    ? `<img src="${item.image}" alt="${item.title}" loading="lazy">`
+                    : `<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;">${item.icon}</svg>`;
+                
                 card.innerHTML = `
-                    <div class="image-placeholder" style="${item.image ? 'background: transparent;' : ''}">${mediaContent}</div>
+                    <div class="image-placeholder">${mediaContent}</div>
                     <h3>${item.title}</h3>
                     <p>${item.desc}</p>
                     <div class="card-footer">
                         <span class="category-tag">${item.categoryLabel}</span>
-                        <span class="view-btn">ดูแบบแปลน</span>
+                        <span class="view-btn">เปิดดูแบบ</span>
                     </div>
                 `;
 
@@ -681,7 +781,6 @@
             });
         }
 
-        // Filters
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
@@ -690,35 +789,30 @@
             });
         });
 
-        // Modal Functions
         function openModal(item) {
             modalTitle.textContent = item.title;
             modalDesc.textContent = item.desc;
             modalCategory.textContent = item.categoryLabel;
 
             modalColorOptions.innerHTML = standardColors.map((c, index) =>
-                `<div class="color-swatch ${index === 0 ? 'active' : ''}" 
-                      style="background-color: ${c.hex}; color: ${c.hex};" 
+                `<button class="color-swatch ${index === 0 ? 'active' : ''}" 
+                      style="background-color: ${c.hex};" 
                       data-color="${c.hex}" title="${c.name}"
                       onclick="selectColor(this, '${c.name}', '${c.hex}')">
-                 </div>`
+                 </button>`
             ).join('');
             selectedColorText.textContent = standardColors[0].name;
 
-            const imgWrapper = document.querySelector('.modal-img-wrapper');
             const imgContainer = document.getElementById('modalImageContainer');
-            
             if (item.image) {
                 imgContainer.innerHTML = `<img id="modalImage" src="${item.image}" alt="${item.title}" style="transition: filter 0.3s ease;">`;
-                imgWrapper.style.background = 'var(--modal-img-bg)';
             } else {
                 imgContainer.innerHTML = `<svg id="modalIcon" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>`;
-                imgWrapper.style.background = 'var(--surface)';
             }
 
             currentZoom = 1; panX = 0; panY = 0; updateZoom();
             modal.classList.add('active');
-            document.body.style.overflow = "hidden"; // Prevent background scrolling when modal is open
+            document.body.style.overflow = "hidden";
         }
 
         window.selectColor = function(element, name, hexColor) {
@@ -727,7 +821,9 @@
             selectedColorText.textContent = name;
 
             const img = document.getElementById('modalImage');
-            if (img) { img.style.filter = hexColor === "#E2E8F0" ? "none" : `drop-shadow(0 0 20px ${hexColor})`; }
+            if (img) { 
+                img.style.filter = hexColor === "#E2E8F0" ? "none" : `drop-shadow(0 15px 25px ${hexColor})`; 
+            }
         }
 
         function close() {
@@ -739,7 +835,6 @@
         closeModal.addEventListener('click', close);
         modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
 
-        // Initialize 
         renderCards();
 
         // Theme Toggle
@@ -752,7 +847,7 @@
                 document.documentElement.setAttribute('data-theme', 'dark');
                 themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
             } else {
-                document.documentElement.removeAttribute('data-theme');
+                document.documentElement.setAttribute('data-theme', 'light');
                 themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
             }
         }
@@ -763,6 +858,15 @@
             localStorage.setItem('theme', currentTheme);
             updateThemeUI();
         });
+
+        // Add Keyframes dynamically for initial load
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes floatUp {
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
 
     </script>
 </body>
