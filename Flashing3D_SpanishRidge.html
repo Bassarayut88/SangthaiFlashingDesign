@@ -11,10 +11,9 @@
         body {
             margin: 0;
             overflow: hidden;
-            /* สีพื้นหลังสีเหลืองคล้ายในรูปตัวอย่าง */
             background-color: #f1c40f;
             background: radial-gradient(circle, #f1c40f 0%, #e67e22 100%);
-            touch-action: none; /* ป้องกันการเลื่อนหน้าจอบนมือถือเพื่อให้ซูม/หมุนได้ลื่นไหล */
+            touch-action: none;
         }
 
         #canvas-container {
@@ -43,7 +42,6 @@
             }
         }
 
-        /* สไตล์สำหรับหน้าต่างเลือกสีแบบ Classic Windows */
         .classic-dialog {
             background-color: #f0f0f0;
             border: 1px solid #ccc;
@@ -51,7 +49,10 @@
             border-radius: 6px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
-            max-width: 95vw; /* ป้องกันล้นจอมือถือ */
+            max-width: 95vw;
+            max-height: 95vh;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .color-box {
@@ -102,7 +103,6 @@
 </head>
 
 <body>
-    <!-- พื้นที่สำหรับแสดง 3D -->
     <div id="canvas-container"></div>
 
     <!-- ปุ่มเปิดแผงควบคุม -->
@@ -141,7 +141,6 @@
             </button>
         </div>
 
-        <!-- ส่วนกำหนดขนาดและองศา -->
         <div class="mb-5">
             <h2 class="text-sm font-semibold text-gray-700 mb-2">กำหนดขนาดและองศา</h2>
             <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
@@ -188,21 +187,11 @@
             </div>
 
             <div class="mt-3 flex gap-3">
-                <button
-                    class="w-7 h-7 rounded-full bg-[#cccccc] border-2 border-white shadow-md hover:scale-110 transition-transform"
-                    onclick="window.setColor('#cccccc')"></button>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#2c3e50] border-2 border-white shadow-md hover:scale-110 transition-transform"
-                    onclick="window.setColor('#2c3e50')"></button>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#8b0000] border-2 border-white shadow-md hover:scale-110 transition-transform"
-                    onclick="window.setColor('#8b0000')"></button>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#006400] border-2 border-white shadow-md hover:scale-110 transition-transform"
-                    onclick="window.setColor('#006400')"></button>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#1e3a8a] border-2 border-white shadow-md hover:scale-110 transition-transform"
-                    onclick="window.setColor('#1e3a8a')"></button>
+                <button class="w-7 h-7 rounded-full bg-[#cccccc] border-2 border-white shadow-md hover:scale-110 transition-transform" onclick="window.setColor('#cccccc')"></button>
+                <button class="w-7 h-7 rounded-full bg-[#2c3e50] border-2 border-white shadow-md hover:scale-110 transition-transform" onclick="window.setColor('#2c3e50')"></button>
+                <button class="w-7 h-7 rounded-full bg-[#8b0000] border-2 border-white shadow-md hover:scale-110 transition-transform" onclick="window.setColor('#8b0000')"></button>
+                <button class="w-7 h-7 rounded-full bg-[#006400] border-2 border-white shadow-md hover:scale-110 transition-transform" onclick="window.setColor('#006400')"></button>
+                <button class="w-7 h-7 rounded-full bg-[#1e3a8a] border-2 border-white shadow-md hover:scale-110 transition-transform" onclick="window.setColor('#1e3a8a')"></button>
             </div>
         </div>
 
@@ -237,59 +226,41 @@
 
                 <div class="flex flex-col flex-1 sm:pl-2 sm:border-l sm:border-gray-300">
                     <div class="flex gap-3 h-[180px] mb-4 relative">
-                        <div id="hueSatMap"
-                            class="flex-1 relative border border-gray-400 overflow-hidden cursor-crosshair"
-                            style="background: linear-gradient(to bottom, transparent, #808080), linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-gray-500/50 to-transparent mix-blend-multiply pointer-events-none">
-                            </div>
-                            <div id="hueSatCursor"
-                                class="absolute w-4 h-4 border-2 border-black rounded-full top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
-                            </div>
+                        <div id="hueSatMap" class="flex-1 relative border border-gray-400 overflow-hidden cursor-crosshair" style="background: linear-gradient(to bottom, transparent, #808080), linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-500/50 to-transparent mix-blend-multiply pointer-events-none"></div>
+                            <div id="hueSatCursor" class="absolute w-4 h-4 border-2 border-black rounded-full top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"></div>
                         </div>
-                        <div id="lumSlider" class="w-[20px] relative border border-gray-400 cursor-ns-resize"
-                            style="background: linear-gradient(to bottom, #ffffff, #ff0000, #000000);">
-                            <div id="lumArrow"
-                                class="absolute right-0 top-[50%] w-0 h-0 border-y-[5px] border-y-transparent border-r-[6px] border-r-black -translate-y-1/2 translate-x-full pointer-events-none">
-                            </div>
+                        <div id="lumSlider" class="w-[20px] relative border border-gray-400 cursor-ns-resize" style="background: linear-gradient(to bottom, #ffffff, #ff0000, #000000);">
+                            <div id="lumArrow" class="absolute right-0 top-[50%] w-0 h-0 border-y-[5px] border-y-transparent border-r-[6px] border-r-black -translate-y-1/2 translate-x-full pointer-events-none"></div>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-end">
                         <div class="flex flex-col items-center pl-2">
-                            <div id="dialogColorPreview"
-                                class="w-14 h-12 border border-gray-500 shadow-inner bg-[#cccccc] mb-1"></div>
+                            <div id="dialogColorPreview" class="w-14 h-12 border border-gray-500 shadow-inner bg-[#cccccc] mb-1"></div>
                             <span class="text-[11px]">Color|Solid</span>
                         </div>
 
                         <div class="grid grid-cols-2 gap-x-2 gap-y-1 items-center text-[12px]">
-                            <span class="text-right">Hue:</span><input type="number" id="inp-h"
-                                class="classic-input w-10 text-right" disabled>
-                            <span class="text-right">Sat:</span><input type="number" id="inp-s"
-                                class="classic-input w-10 text-right" disabled>
-                            <span class="text-right">Lum:</span><input type="number" id="inp-l"
-                                class="classic-input w-10 text-right" disabled>
+                            <span class="text-right">Hue:</span><input type="number" id="inp-h" class="classic-input w-10 text-right" disabled>
+                            <span class="text-right">Sat:</span><input type="number" id="inp-s" class="classic-input w-10 text-right" disabled>
+                            <span class="text-right">Lum:</span><input type="number" id="inp-l" class="classic-input w-10 text-right" disabled>
                         </div>
 
                         <div class="grid grid-cols-2 gap-x-2 gap-y-1 items-center text-[12px]">
-                            <span class="text-right">Red:</span><input type="number" id="inp-r"
-                                class="classic-input w-10 text-right">
-                            <span class="text-right">Green:</span><input type="number" id="inp-g"
-                                class="classic-input w-10 text-right">
-                            <span class="text-right">Blue:</span><input type="number" id="inp-b"
-                                class="classic-input w-10 text-right">
+                            <span class="text-right">Red:</span><input type="number" id="inp-r" class="classic-input w-10 text-right">
+                            <span class="text-right">Green:</span><input type="number" id="inp-g" class="classic-input w-10 text-right">
+                            <span class="text-right">Blue:</span><input type="number" id="inp-b" class="classic-input w-10 text-right">
                         </div>
                     </div>
-                    <button onclick="window.addToCustomColors()" class="classic-btn w-full mt-4">Add to Custom
-                        Colors</button>
+                    <button onclick="window.addToCustomColors()" class="classic-btn w-full mt-4">Add to Custom Colors</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ✅ แสดงความยาวรวม (ซ้ายล่าง) ล็อกตำแหน่งด้วย fixed -->
-    <div
-        class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-20 bg-white/90 backdrop-blur px-4 py-2 sm:px-5 sm:py-3 rounded-xl shadow-lg border border-gray-200 pointer-events-none flex flex-col transition-all">
+    <!-- ✅ แสดงความยาวรวม (ซ้ายล่าง) -->
+    <div class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-20 bg-white/90 backdrop-blur px-4 py-2 sm:px-5 sm:py-3 rounded-xl shadow-lg border border-gray-200 pointer-events-none flex flex-col transition-all">
         <span class="text-[10px] sm:text-xs text-gray-500 font-semibold mb-0.5">ความยาวรวมแผ่นเรียบ (Girth)</span>
         <div class="flex items-baseline gap-1">
             <span id="totalLengthText" class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">0.0</span>
@@ -297,7 +268,7 @@
         </div>
     </div>
 
-    <!-- ✅ ปุ่มซูม (ขวาล่าง) ล็อกตำแหน่งด้วย fixed -->
+    <!-- ✅ ปุ่มซูม (ขวาล่าง) -->
     <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 flex flex-col gap-2 sm:gap-3">
         <button id="zoomInBtn"
             class="bg-white/90 backdrop-blur w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md border border-gray-200 text-gray-700 hover:text-blue-600 hover:border-blue-500 hover:scale-105 flex items-center justify-center transition-all active:scale-95"
@@ -315,7 +286,6 @@
         </button>
     </div>
 
-    <!-- สคริปต์จัดการหน้าต่างสี Classic -->
     <script>
         const classicBasicColors = [
             '#FF8080', '#FFFF80', '#80FF80', '#00FF80', '#80FFFF', '#0080FF', '#FF80C0', '#FF80FF',
@@ -503,9 +473,8 @@
         // 1. ตั้งค่า Scene, Camera, Renderer
         const scene = new THREE.Scene();
 
-        // ถอยกล้องออกมาหน่อยเพราะความกว้างรวมของชิ้นงานค่อนข้างกว้าง
         const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(20, 20, 55);
+        camera.position.set(20, 15, 45);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -525,117 +494,98 @@
         dirLight.position.set(10, 20, 10);
         scene.add(dirLight);
 
-        // Setup initial values based on URL parameters (ID 1, 2 = Ridge)
-        const urlParams = new URLSearchParams(window.location.search);
-        const profileId = urlParams.get('id');
-
-        if (profileId === '1') {
-            document.title = "3D Model - ครอบจั่วลอนสเปน";
-            document.querySelector("h1.text-xl").innerText = "ตั้งค่าโมเดล (ครอบจั่วลอนสเปน)";
-        } else if (profileId === '2') {
-            document.title = "3D Model - ครอบจั่วมุม 457";
-            document.querySelector("h1.text-xl").innerText = "ตั้งค่าโมเดล (ครอบจั่วมุม 457)";
-        } else if (profileId === '3') {
-            document.title = "3D Model - ครอบสันตะเข้ 457";
-            document.querySelector("h1.text-xl").innerText = "ตั้งค่าโมเดล (ครอบสันตะเข้ 457)";
+        // ✅ สร้างฟังก์ชันดึงค่าที่ปลอดภัย (ป้องกัน Error Cannot read properties of null)
+        function getSafeVal(id, fallback) {
+            const el = document.getElementById(id);
+            return el ? (parseFloat(el.value) || fallback) : fallback;
         }
 
         // 3. สร้างเรขาคณิต (Geometry) แบบ ครอบจั่วลอนสเปน
         function createSpanishRidgeGeometry(params) {
             const t = 0.2; // ความหนาแผ่นเหล็ก
 
-            // ดึงค่าสัดส่วน (cm) จาก UI
-            const L1 = params ? params.dimMain : parseFloat(document.getElementById('dimMain').value) || 16.85; // ปีกหลัก
-            const L2 = params ? params.dimStep : parseFloat(document.getElementById('dimStep').value) || 2.0;   // ขอบหยักลง
-            const L3 = params ? params.dimTail : parseFloat(document.getElementById('dimTail').value) || 4.0;   // ปีกปลาย
+            // ดึงค่าสัดส่วน (cm) จาก UI แบบปลอดภัย
+            const L1 = params ? params.dimMain : getSafeVal('dimMain', 16.85); // ปีกหลัก
+            const L2 = params ? params.dimStep : getSafeVal('dimStep', 2.0);   // ขอบหยักลง
+            const L3 = params ? params.dimTail : getSafeVal('dimTail', 4.0);   // ปีกปลาย
 
-            // ดึงค่าองศา (แปลงเป็นเรเดียน) ทิศทางคือชี้ลงขวา (องศาติดลบ)
-            const th1 = -(params ? params.angMain : parseFloat(document.getElementById('angMain').value) || 15) * Math.PI / 180;
-            const th2 = -(params ? params.angStep : parseFloat(document.getElementById('angStep').value) || 60) * Math.PI / 180;
-            const th3 = -(params ? params.angTail : parseFloat(document.getElementById('angTail').value) || 15) * Math.PI / 180;
+            const th1 = -(params ? params.angMain : getSafeVal('angMain', 15)) * Math.PI / 180;
+            const th2 = -(params ? params.angStep : getSafeVal('angStep', 60)) * Math.PI / 180;
+            const th3 = -(params ? params.angTail : getSafeVal('angTail', 15)) * Math.PI / 180;
 
-            // เวกเตอร์ทิศทางของแต่ละช่วง (ฝั่งขวา)
             const v1 = new THREE.Vector2(Math.cos(th1), Math.sin(th1));
             const v2 = new THREE.Vector2(Math.cos(th2), Math.sin(th2));
             const v3 = new THREE.Vector2(Math.cos(th3), Math.sin(th3));
 
-            // เวกเตอร์ตั้งฉาก (Normal) ชี้ออกด้านนอก/ด้านบน
             const n1 = new THREE.Vector2(-Math.sin(th1), Math.cos(th1));
             const n2 = new THREE.Vector2(-Math.sin(th2), Math.cos(th2));
             const n3 = new THREE.Vector2(-Math.sin(th3), Math.cos(th3));
 
-            // --- คำนวณจุดขอบด้านใน (Inner Profile) เริ่มจากจุดยอดตรงกลางไปทางขวา ---
             const p_in_0 = new THREE.Vector2(0, 0); // จุดยอดกลาง
-            const p_in_1 = new THREE.Vector2(p_in_0.x + L1 * v1.x, p_in_0.y + L1 * v1.y); // จบปีกหลัก เริ่มหยัก
-            const p_in_2 = new THREE.Vector2(p_in_1.x + L2 * v2.x, p_in_1.y + L2 * v2.y); // จบหยัก เริ่มปีกปลาย
-            const p_in_3 = new THREE.Vector2(p_in_2.x + L3 * v3.x, p_in_2.y + L3 * v3.y); // ปลายสุดฝั่งขวา
+            const p_in_1 = new THREE.Vector2(p_in_0.x + L1 * v1.x, p_in_0.y + L1 * v1.y);
+            const p_in_2 = new THREE.Vector2(p_in_1.x + L2 * v2.x, p_in_1.y + L2 * v2.y);
+            const p_in_3 = new THREE.Vector2(p_in_2.x + L3 * v3.x, p_in_2.y + L3 * v3.y);
 
-            // --- คำนวณจุดอ้างอิงสำหรับขอบด้านนอก (Outer Profile) ตามความหนา t ---
             const op1 = new THREE.Vector2(p_in_0.x + t * n1.x, p_in_0.y + t * n1.y);
             const op2 = new THREE.Vector2(p_in_1.x + t * n2.x, p_in_1.y + t * n2.y);
             const op3 = new THREE.Vector2(p_in_2.x + t * n3.x, p_in_2.y + t * n3.y);
 
-            // ฟังก์ชันหาจุดตัดของเส้น 2 เส้น เพื่อสร้างมุมพับที่สมบูรณ์
             function getIntersect(pA, vA, pB, vB) {
                 const det = vA.x * vB.y - vA.y * vB.x;
-                if (Math.abs(det) < 1e-6) return new THREE.Vector2(pA.x, pA.y); // กรณีเส้นขนานกัน
+                if (Math.abs(det) < 1e-6) return new THREE.Vector2(pA.x, pA.y);
                 const dx = pB.x - pA.x;
                 const dy = pB.y - pA.y;
                 const tA = (dx * vB.y - dy * vB.x) / det;
                 return new THREE.Vector2(pA.x + tA * vA.x, pA.y + tA * vA.y);
             }
 
-            // คำนวณพิกัดมุมพับด้านนอกให้แม่นยำ ป้องกันบั๊กแผ่นไขว้กัน
-            const p_out_0 = new THREE.Vector2(0, Math.abs(t / Math.cos(th1))); // ยอดกลางด้านนอกยกสูงขึ้น
-            const p_out_1 = getIntersect(op1, v1, op2, v2); // จุดตัดมุมหยักบน
-            const p_out_2 = getIntersect(op2, v2, op3, v3); // จุดตัดมุมหยักล่าง
-            const p_out_3 = new THREE.Vector2(p_in_3.x + t * n3.x, p_in_3.y + t * n3.y); // ปลายตัดขอบ
+            const p_out_0 = new THREE.Vector2(0, Math.abs(t / Math.cos(th1))); 
+            const p_out_1 = getIntersect(op1, v1, op2, v2); 
+            const p_out_2 = getIntersect(op2, v2, op3, v3); 
+            const p_out_3 = new THREE.Vector2(p_in_3.x + t * n3.x, p_in_3.y + t * n3.y); 
 
             // --- วาดเส้นรูปร่าง (Shape) ---
             const shape = new THREE.Shape();
 
-            // วาดแบบ Continuous Loop (ซ้ายไปขวาด้านนอก -> ขวากลับซ้ายด้านใน) เพื่อป้องกันบั๊ก Mesh ปิดทึบ
-
-            // 1. เดินเส้นขอบนอก จากฝั่งซ้ายสุด ไปถึงยอดกลาง แล้วไปขวาสุด
-            shape.moveTo(-p_out_3.x, p_out_3.y);
-            shape.lineTo(-p_out_2.x, p_out_2.y);
-            shape.lineTo(-p_out_1.x, p_out_1.y);
-            shape.lineTo(p_out_0.x, p_out_0.y); // ยอดกลางด้านนอก
-            shape.lineTo(p_out_1.x, p_out_1.y);
-            shape.lineTo(p_out_2.x, p_out_2.y);
-            shape.lineTo(p_out_3.x, p_out_3.y);
-
-            // 2. ดึงเส้นลงมาที่ขอบในฝั่งขวาสุด
+            // ✅ แกับทิศทางการวาดเป็นทวนเข็มนาฬิกา (CCW) แก้บั๊กชิ้นงานหาย/กลวง
+            // เดินเส้นขอบใน จากซ้ายสุด ไปยอดกลาง แล้วไปขวาสุด
+            shape.moveTo(-p_in_3.x, p_in_3.y);
+            shape.lineTo(-p_in_2.x, p_in_2.y);
+            shape.lineTo(-p_in_1.x, p_in_1.y);
+            shape.lineTo(p_in_0.x, p_in_0.y);
+            shape.lineTo(p_in_1.x, p_in_1.y);
+            shape.lineTo(p_in_2.x, p_in_2.y);
             shape.lineTo(p_in_3.x, p_in_3.y);
 
-            // 3. เดินเส้นขอบใน ย้อนกลับจากขวา ไปยอดกลาง แล้วไปซ้ายสุด
-            shape.lineTo(p_in_2.x, p_in_2.y);
-            shape.lineTo(p_in_1.x, p_in_1.y);
-            shape.lineTo(p_in_0.x, p_in_0.y);  // ยอดกลางด้านใน
-            shape.lineTo(-p_in_1.x, p_in_1.y);
-            shape.lineTo(-p_in_2.x, p_in_2.y);
-            shape.lineTo(-p_in_3.x, p_in_3.y);
+            // ดึงขึ้นไปขอบนอกฝั่งขวาสุด
+            shape.lineTo(p_out_3.x, p_out_3.y);
 
-            // ปิดรูปทรงกลับไปบรรจบที่จุดแรก
+            // เดินเส้นขอบนอก ย้อนกลับจากขวา ไปยอดกลาง แล้วไปซ้ายสุด
+            shape.lineTo(p_out_2.x, p_out_2.y);
+            shape.lineTo(p_out_1.x, p_out_1.y);
+            shape.lineTo(p_out_0.x, p_out_0.y);
+            shape.lineTo(-p_out_1.x, p_out_1.y);
+            shape.lineTo(-p_out_2.x, p_out_2.y);
+            shape.lineTo(-p_out_3.x, p_out_3.y);
+
             shape.closePath();
 
-            // Extrude ให้เป็น 3 มิติ (ความยาว 30cm) 
             const extrudeSettings = {
                 depth: 30,
-                bevelEnabled: false, // บังคับปิด Bevel เพื่อให้หน้าตัดเปิดโล่ง 100%
+                bevelEnabled: false,
                 steps: 1
             };
 
             const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-            geometry.center(); // จัดโมเดลให้อยู่ตรงกลางจอ
+            geometry.center(); 
             return geometry;
         }
 
-        // --- ✅ ฟังก์ชันคำนวณและอัปเดตความยาวรวม (ซ้ายล่าง) ---
+        // --- ✅ ฟังก์ชันคำนวณและอัปเดตความยาวรวม (ซ้ายล่าง) แบบปลอดภัย ---
         function updateTotalLengthDisplay() {
-            const dimMain = parseFloat(document.getElementById('dimMain').value) || 0;
-            const dimStep = parseFloat(document.getElementById('dimStep').value) || 0;
-            const dimTail = parseFloat(document.getElementById('dimTail').value) || 0;
+            const dimMain = getSafeVal('dimMain', 0);
+            const dimStep = getSafeVal('dimStep', 0);
+            const dimTail = getSafeVal('dimTail', 0);
 
             // Girth = (ปีกหลัก + ขอบหยักลง + ปีกปลาย) * 2 (มี 2 ข้าง ซ้าย/ขวา)
             const total = ((dimMain + dimStep + dimTail) * 2).toFixed(1);
@@ -646,10 +596,8 @@
             }
         }
 
-        // เรียกใช้งานครั้งแรกตอนโหลดหน้าเพื่อแสดงตัวเลข
         updateTotalLengthDisplay();
 
-        // 4. สร้างวัสดุสแตนเลส (ค่าด้าน 0.35 เงา 0.8 ตามที่ตั้งไว้เดิม)
         const material = new THREE.MeshStandardMaterial({
             color: 0xcccccc,
             metalness: 0.8,
@@ -658,26 +606,19 @@
         });
 
         const ridgeMesh = new THREE.Mesh(createSpanishRidgeGeometry(), material);
-        // หันให้เห็นหน้าตัดเฉียงๆ สวยๆ
         ridgeMesh.rotation.y = -Math.PI / 6;
         scene.add(ridgeMesh);
 
-        // 5. ตัวควบคุมเมาส์
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        
-        // ✅ เปิดใช้การซูม (รองรับนิ้วถ่าง/หุบ บนมือถือ และเมาส์บน PC)
         controls.enableZoom = true; 
-        controls.enablePan = false;  // ปิดแพนเพื่อให้ชิ้นงานอยู่ตรงกลางเสมอ
-        controls.minDistance = 10;   // ระยะซูมเข้าใกล้สุด
-        controls.maxDistance = 150;  // ระยะซูมออกไกลสุด
-
-        // หมุนอัตโนมัติ
+        controls.enablePan = false; 
+        controls.minDistance = 10;
+        controls.maxDistance = 150;
         controls.autoRotate = true;
         controls.autoRotateSpeed = 1.5;
 
-        // 6. Loop Animation
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -685,7 +626,6 @@
         }
         animate();
 
-        // --- ✅ การจัดการซูมผ่านปุ่มให้ทำงานร่วมกับ OrbitControls ---
         const zoomInBtn = document.getElementById('zoomInBtn');
         const zoomOutBtn = document.getElementById('zoomOutBtn');
         if (zoomInBtn && zoomOutBtn) {
@@ -699,7 +639,6 @@
             });
         }
 
-        // --- จัดการ UI ---
         const controlPanel = document.getElementById('controlPanel');
         const openPanelBtn = document.getElementById('openPanelBtn');
         const closePanelBtn = document.getElementById('closePanelBtn');
@@ -724,34 +663,28 @@
             window.currentSelectedHexInDialog = hexColor;
         };
 
-        // --- จัดการอัปเดตขนาดชิ้นงาน (Real-time) ---
         const dimInputs = ['dimMain', 'angMain', 'dimStep', 'angStep', 'dimTail', 'angTail'];
 
         function updateGeometry() {
             const params = {
-                dimMain: parseFloat(document.getElementById('dimMain').value) || 0.1,
-                angMain: parseFloat(document.getElementById('angMain').value) || 0,
-                dimStep: parseFloat(document.getElementById('dimStep').value) || 0.1,
-                angStep: parseFloat(document.getElementById('angStep').value) || 0,
-                dimTail: parseFloat(document.getElementById('dimTail').value) || 0.1,
-                angTail: parseFloat(document.getElementById('angTail').value) || 0
+                dimMain: getSafeVal('dimMain', 0.1),
+                angMain: getSafeVal('angMain', 0),
+                dimStep: getSafeVal('dimStep', 0.1),
+                angStep: getSafeVal('angStep', 0),
+                dimTail: getSafeVal('dimTail', 0.1),
+                angTail: getSafeVal('angTail', 0)
             };
 
-            // ลบ Geometry เก่าออกจากหน่วยความจำเพื่อป้องกันอาการกระตุก
             ridgeMesh.geometry.dispose();
-            // วาด Geometry ใหม่
             ridgeMesh.geometry = createSpanishRidgeGeometry(params);
-
-            // อัปเดตตัวเลขความยาวรวม (ซ้ายล่าง) เมื่อมีการปรับขนาด
             updateTotalLengthDisplay();
         }
 
-        // ผูกฟังก์ชันเข้ากับทุกช่องกรอกตัวเลข
         dimInputs.forEach(id => {
-            document.getElementById(id).addEventListener('input', updateGeometry);
+            const el = document.getElementById(id);
+            if(el) el.addEventListener('input', updateGeometry);
         });
 
-        // จัดการเมื่อย่อขยายหน้าต่างเบราว์เซอร์
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
