@@ -143,26 +143,26 @@
 
         <!-- ส่วนกำหนดขนาดและองศา -->
         <div class="mb-5">
-            <h2 class="text-sm font-semibold text-gray-700 mb-2">กำหนดขนาด (cm)</h2>
+            <h2 class="text-sm font-semibold text-gray-700 mb-2">กำหนดขนาด (มิลลิเมตร)</h2>
             <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <div>
                     <label class="block text-[11px] text-gray-600 mb-1">ความกว้างฐาน (W)</label>
-                    <input type="number" id="dimBase" value="15.00" step="0.1"
+                    <input type="number" id="dimBase" value="150.0" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
                     <label class="block text-[11px] text-gray-600 mb-1">ความสูงผนัง (H)</label>
-                    <input type="number" id="dimSide" value="10.00" step="0.1"
+                    <input type="number" id="dimSide" value="100.0" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
                     <label class="block text-[11px] text-gray-600 mb-1">ความกว้างปีก (F)</label>
-                    <input type="number" id="dimFlange" value="5.35" step="0.1"
+                    <input type="number" id="dimFlange" value="53.5" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
                     <label class="block text-[11px] text-gray-600 mb-1">ความยาว (L)</label>
-                    <input type="number" id="dimLength" value="50.00" step="0.1"
+                    <input type="number" id="dimLength" value="500.0" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
             </div>
@@ -282,7 +282,7 @@
         <span class="text-[10px] sm:text-xs text-gray-500 font-semibold mb-0.5">ความยาวรวมแผ่นเรียบ (Girth)</span>
         <div class="flex items-baseline gap-1">
             <span id="totalLengthText" class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">0.0</span>
-            <span class="text-xs sm:text-sm font-medium text-gray-600">ซม.</span>
+            <span class="text-xs sm:text-sm font-medium text-gray-600">มม.</span>
         </div>
     </div>
 
@@ -513,10 +513,11 @@
         function createGutterGeometry(params) {
             const t = 0.2; // ความหนาแผ่นเหล็ก
 
-            const W = params ? params.dimBase : parseFloat(document.getElementById('dimBase').value) || 15.0;   // ฐานกว้าง
-            const H = params ? params.dimSide : parseFloat(document.getElementById('dimSide').value) || 10.0;   // ผนังสูง
-            const F = params ? params.dimFlange : parseFloat(document.getElementById('dimFlange').value) || 5.0; // ปีกกว้าง
-            const L = params ? params.dimLength : parseFloat(document.getElementById('dimLength').value) || 50.0; // ความยาวราง
+            // ดึงค่าจาก UI (มม.) และหาร 10 เพื่อแปลงเป็น ซม. สำหรับให้สเกล Three.js ทำงานได้เท่าเดิม
+            const W = (params ? params.dimBase : parseFloat(document.getElementById('dimBase').value) || 150.0) / 10;   // ฐานกว้าง
+            const H = (params ? params.dimSide : parseFloat(document.getElementById('dimSide').value) || 100.0) / 10;   // ผนังสูง
+            const F = (params ? params.dimFlange : parseFloat(document.getElementById('dimFlange').value) || 53.5) / 10; // ปีกกว้าง
+            const L = (params ? params.dimLength : parseFloat(document.getElementById('dimLength').value) || 500.0) / 10; // ความยาวราง
 
             const hw = W / 2; // ครึ่งความกว้างฐาน
 
