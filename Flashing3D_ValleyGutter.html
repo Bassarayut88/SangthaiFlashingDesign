@@ -148,23 +148,23 @@
             <h2 class="text-sm font-semibold text-gray-700 mb-2">กำหนดขนาดและองศา</h2>
             <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">กว้างท้องราง (cm)</label>
-                    <input type="number" id="dimBase" value="10.00" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">กว้างท้องราง (มม.)</label>
+                    <input type="number" id="dimBase" value="100.0" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">รอยพับท้องราง (cm)</label>
-                    <input type="number" id="dimCrease" value="1.50" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">รอยพับท้องราง (มม.)</label>
+                    <input type="number" id="dimCrease" value="15.0" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">ความลึกราง (cm)</label>
-                    <input type="number" id="dimDepth" value="5.00" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">ความลึกราง (มม.)</label>
+                    <input type="number" id="dimDepth" value="50.0" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">ความยาวปีก (cm)</label>
-                    <input type="number" id="dimWing" value="15.00" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">ความยาวปีก (มม.)</label>
+                    <input type="number" id="dimWing" value="150.0" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div class="col-span-2">
@@ -290,7 +290,7 @@
         <span class="text-[10px] sm:text-xs text-gray-500 font-semibold mb-0.5">ความยาวรวมแผ่นเรียบ (Girth)</span>
         <div class="flex items-baseline gap-1">
             <span id="totalLengthText" class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">0.0</span>
-            <span class="text-xs sm:text-sm font-medium text-gray-600">ซม.</span>
+            <span class="text-xs sm:text-sm font-medium text-gray-600">มม.</span>
         </div>
     </div>
 
@@ -526,11 +526,11 @@
             const t = 0.2; // ความหนาแผ่นเหล็ก
             const depth = 30; // ความยาวชิ้นงาน
 
-            // ดึงค่าจาก UI
-            const w_half = (params ? params.dimBase : parseFloat(document.getElementById('dimBase').value) || 10.00) / 2;
-            const h_depth = params ? params.dimDepth : parseFloat(document.getElementById('dimDepth').value) || 5.00;
-            const h_v = params ? params.dimCrease : parseFloat(document.getElementById('dimCrease').value) || 1.50;
-            const L_wing = params ? params.dimWing : parseFloat(document.getElementById('dimWing').value) || 15.00;
+            // ดึงค่าจาก UI (มม.) แล้วหาร 10 กลับเป็นซม. สำหรับให้สเกล 3D เท่าเดิม
+            const w_half = ((params ? params.dimBase : parseFloat(document.getElementById('dimBase').value) || 100.0) / 10) / 2;
+            const h_depth = (params ? params.dimDepth : parseFloat(document.getElementById('dimDepth').value) || 50.0) / 10;
+            const h_v = (params ? params.dimCrease : parseFloat(document.getElementById('dimCrease').value) || 15.0) / 10;
+            const L_wing = (params ? params.dimWing : parseFloat(document.getElementById('dimWing').value) || 150.0) / 10;
             const a_wing = (params ? params.angWing : parseFloat(document.getElementById('angWing').value) || 15) * Math.PI / 180;
 
             const v_wing = new THREE.Vector2(Math.cos(a_wing), Math.sin(a_wing));
@@ -712,9 +712,9 @@
 
         function updateGeometry() {
             const params = {
-                dimBase: parseFloat(document.getElementById('dimBase').value) || 0.1,
-                dimDepth: parseFloat(document.getElementById('dimDepth').value) || 0.1,
-                dimWing: parseFloat(document.getElementById('dimWing').value) || 0.1,
+                dimBase: parseFloat(document.getElementById('dimBase').value) || 1.0,
+                dimDepth: parseFloat(document.getElementById('dimDepth').value) || 1.0,
+                dimWing: parseFloat(document.getElementById('dimWing').value) || 1.0,
                 angWing: parseFloat(document.getElementById('angWing').value) || 0,
                 dimCrease: parseFloat(document.getElementById('dimCrease').value) || 0
             };
