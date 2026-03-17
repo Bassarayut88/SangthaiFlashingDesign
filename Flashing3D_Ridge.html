@@ -150,8 +150,8 @@
             <h2 class="text-sm font-semibold text-gray-700 mb-2">กำหนดขนาดและองศา</h2>
             <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">สันกลาง (cm)</label>
-                    <input type="number" id="dimPeak" value="3.0" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">สันกลาง (มม.)</label>
+                    <input type="number" id="dimPeak" value="30" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
@@ -160,8 +160,8 @@
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">ปีกหลังคา (cm)</label>
-                    <input type="number" id="dimMain" value="15.85" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">ปีกหลังคา (มม.)</label>
+                    <input type="number" id="dimMain" value="158.5" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
@@ -170,8 +170,8 @@
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">พับขอบ (cm)</label>
-                    <input type="number" id="dimEdge" value="4.0" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">พับขอบ (มม.)</label>
+                    <input type="number" id="dimEdge" value="40" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
@@ -269,7 +269,7 @@
         <span class="text-[10px] sm:text-xs text-gray-500 font-semibold mb-0.5">ความยาวรวมแผ่นเรียบ (Girth)</span>
         <div class="flex items-baseline gap-1">
             <span id="totalLengthText" class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">0.0</span>
-            <span class="text-xs sm:text-sm font-medium text-gray-600">ซม.</span>
+            <span class="text-xs sm:text-sm font-medium text-gray-600">มม.</span>
         </div>
     </div>
 
@@ -506,10 +506,10 @@
         function createRidgeGeometry(params) {
             const t = 0.2; // ความหนาแผ่นเหล็ก
 
-            // ดึงค่าสัดส่วน (cm) จาก UI อย่างปลอดภัย
-            const L1 = params ? params.dimPeak : getSafeVal('dimPeak', 3.0);
-            const L2 = params ? params.dimMain : getSafeVal('dimMain', 15.85);
-            const L3 = params ? params.dimEdge : getSafeVal('dimEdge', 4.0);
+            // ดึงค่าสัดส่วน (มม.) จาก UI อย่างปลอดภัย และหาร 10 กลับเป็นซม.สำหรับสเกล Three.js
+            const L1 = (params ? params.dimPeak : getSafeVal('dimPeak', 30)) / 10;
+            const L2 = (params ? params.dimMain : getSafeVal('dimMain', 158.5)) / 10;
+            const L3 = (params ? params.dimEdge : getSafeVal('dimEdge', 40)) / 10;
 
             // ดึงค่าองศา (แปลงเป็นเรเดียน)
             const th1 = -(params ? params.angPeak : getSafeVal('angPeak', 65)) * Math.PI / 180;
@@ -669,11 +669,11 @@
 
         function updateGeometry() {
             const params = {
-                dimPeak: getSafeVal('dimPeak', 3.0),
+                dimPeak: getSafeVal('dimPeak', 30),
                 angPeak: getSafeVal('angPeak', 65),
-                dimMain: getSafeVal('dimMain', 15.85),
+                dimMain: getSafeVal('dimMain', 158.5),
                 angMain: getSafeVal('angMain', 15),
-                dimEdge: getSafeVal('dimEdge', 4.0),
+                dimEdge: getSafeVal('dimEdge', 40),
                 angEdge: getSafeVal('angEdge', 75)
             };
 
