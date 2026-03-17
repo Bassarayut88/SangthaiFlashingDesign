@@ -145,18 +145,18 @@
             <h2 class="text-sm font-semibold text-gray-700 mb-2">กำหนดขนาดและองศา</h2>
             <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">ขาตั้ง (cm)</label>
-                    <input type="number" id="dimV" value="11.20" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">ขาตั้ง (mm)</label>
+                    <input type="number" id="dimV" value="112" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">ขานอน (cm)</label>
-                    <input type="number" id="dimH" value="11.20" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">ขานอน (mm)</label>
+                    <input type="number" id="dimH" value="112" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">พับปลายตั้ง (cm)</label>
-                    <input type="number" id="dimFlapV" value="4.00" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">พับปลายตั้ง (mm)</label>
+                    <input type="number" id="dimFlapV" value="40" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
@@ -165,8 +165,8 @@
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] text-gray-600 mb-1">พับปลายนอน (cm)</label>
-                    <input type="number" id="dimFlapH" value="4.00" step="0.1"
+                    <label class="block text-[11px] text-gray-600 mb-1">พับปลายนอน (mm)</label>
+                    <input type="number" id="dimFlapH" value="40" step="0.1"
                         class="w-full border border-gray-300 rounded p-1.5 text-sm focus:outline-blue-500">
                 </div>
                 <div>
@@ -292,7 +292,7 @@
         <span class="text-[10px] sm:text-xs text-gray-500 font-semibold mb-0.5">ความยาวรวมแผ่นเรียบ (Girth)</span>
         <div class="flex items-baseline gap-1">
             <span id="totalLengthText" class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">0.0</span>
-            <span class="text-xs sm:text-sm font-medium text-gray-600">ซม.</span>
+            <span class="text-xs sm:text-sm font-medium text-gray-600">มม.</span>
         </div>
     </div>
 
@@ -540,11 +540,11 @@
         function createCornerPostGeometry(params) {
             const t = 0.2; // ความหนาแผ่นเหล็ก
 
-            // ดึงค่าจาก UI
-            const L_v = params ? params.dimV : parseFloat(document.getElementById('dimV').value) || 11.20;      // ขาตั้ง (แนวตั้ง)
-            const L_h = params ? params.dimH : parseFloat(document.getElementById('dimH').value) || 11.20;      // ขานอน (แนวนอน)
-            const L_fV = params ? params.dimFlapV : parseFloat(document.getElementById('dimFlapV').value) || 4.00;  // ปีกพับตั้ง
-            const L_fH = params ? params.dimFlapH : parseFloat(document.getElementById('dimFlapH').value) || 4.00;  // ปีกพับนอน
+            // ดึงค่าจาก UI แล้วหาร 10 เพื่อแปลงจาก mm เป็น cm ให้ตรงกับสเกลเดิมของ Three.js
+            const L_v = (params ? params.dimV : parseFloat(document.getElementById('dimV').value) || 112) / 10;      // ขาตั้ง (แนวตั้ง)
+            const L_h = (params ? params.dimH : parseFloat(document.getElementById('dimH').value) || 112) / 10;      // ขานอน (แนวนอน)
+            const L_fV = (params ? params.dimFlapV : parseFloat(document.getElementById('dimFlapV').value) || 40) / 10;  // ปีกพับตั้ง
+            const L_fH = (params ? params.dimFlapH : parseFloat(document.getElementById('dimFlapH').value) || 40) / 10;  // ปีกพับนอน
 
             // องศาการพับ (0 คือพับตรงเป็นแผ่นเดียว, เพิ่มขึ้นคือพับบีบเข้าหากัน)
             const aV = params ? params.angFlapV : parseFloat(document.getElementById('angFlapV').value) || 45;
@@ -627,19 +627,19 @@
             return geometry;
         }
 
-        // ตั้งค่าเริ่มต้นตาม ID
+        // ตั้งค่าเริ่มต้นตาม ID (อัปเดตค่าเป็น mm)
         if (itemId === 12) { // 457
-            document.getElementById('dimV').value = 18.85;
-            document.getElementById('dimH').value = 18.85;
-            document.getElementById('dimFlapV').value = 4.0;
+            document.getElementById('dimV').value = 188.5;
+            document.getElementById('dimH').value = 188.5;
+            document.getElementById('dimFlapV').value = 40;
             document.getElementById('angFlapV').value = 45;
-            document.getElementById('dimFlapH').value = 4.0;
+            document.getElementById('dimFlapH').value = 40;
             document.getElementById('angFlapH').value = 45;
         } else if (itemId === 13) {
-            document.getElementById('dimV').value = 19.5;
-            document.getElementById('dimH').value = 19.5;
-            document.getElementById('dimFlapV').value = 4.0;
-            document.getElementById('dimFlapH').value = 4.0;
+            document.getElementById('dimV').value = 195;
+            document.getElementById('dimH').value = 195;
+            document.getElementById('dimFlapV').value = 40;
+            document.getElementById('dimFlapH').value = 40;
         }
 
         // --- ฟังก์ชันคำนวณและอัปเดตความยาวรวม (ซ้ายล่าง) ---
