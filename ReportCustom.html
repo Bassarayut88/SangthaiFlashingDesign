@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบรายการผลิต - Custom Flashing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f1f5f9;
+            color: #000;
+        }
+
+        /* -----------------------------------------
+           CSS โครงสร้างตารางหลัก (Unified Table)
+        ----------------------------------------- */
+        .form-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border: 2px solid #000;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 14px;
+        }
+        .form-table th, .form-table td {
+            border: 1px solid #000;
+            padding: 6px 8px;
+            vertical-align: middle;
+        }
+        .form-table th {
+            background-color: #f8fafc;
+            font-weight: 700;
+        }
+
+        /* ลบขอบที่ซ้ำซ้อนกันของตาราง เพื่อให้หลอมรวมเป็นแผ่นเดียวกับ Container */
+        .form-table tr td:first-child, .form-table tr th:first-child { border-left: none; }
+        .form-table tr td:last-child, .form-table tr th:last-child { border-right: none; }
+        .form-table.header-table tr:first-child td { border-top: none; }
+        .form-table.footer-table tr:last-child td { border-bottom: none; }
+        
+        /* ช่องกรอกข้อมูล */
+        .form-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            outline: none;
+            text-align: center;
+            font-family: inherit;
+            font-size: inherit;
+            color: #000;
+            padding: 2px;
+        }
+        .form-input:focus { background-color: #f0fdf4; }
+        .form-input.left { text-align: left; padding-left: 8px; }
+        .form-input.bold { font-weight: bold; }
+        .form-input.blue { color: #1e3a8a; }
+        .form-input.red { color: #dc2626; }
+
+        input[type="date"].form-input {
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* -----------------------------------------
+           ตั้งค่าสำหรับการพิมพ์ (Print) เกรดโรงงาน
+        ----------------------------------------- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .no-print { display: none !important; }
+            
+            .print-wrapper {
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: none !important;
+            }
+            
+            @page { 
+                size: A4 portrait; 
+                margin: 10mm 15mm; /* ระยะขอบ A4 พอดี */
+            }
+            
+            /* ล็อกความสูงและสัดส่วนให้ 1 ชิ้นงานเต็ม A4 พอดี ห้ามขาด */
+            .form-container {
+                height: 275mm !important; /* ความสูงเนื้อหา A4 */
+                page-break-after: always;
+                page-break-inside: avoid;
+                border: 2px solid #000 !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+
+            .form-table th { background-color: #f3f4f6 !important; }
+            
+            /* ลบเส้นประ และ Placeholder ทิ้งให้หมด */
+            .form-input { border: none !important; box-shadow: none !important; }
+            .border-dashed, .border-b { border: none !important; }
+            .form-input::-webkit-input-placeholder { color: transparent !important; }
+            .form-input::-moz-placeholder { color: transparent !important; }
+            .form-input:-ms-input-placeholder { color: transparent !important; }
+            
+            input[type="date"]::-webkit-calendar-picker-indicator,
+            input[type="date"]::-webkit-inner-spin-button {
+                display: none !important;
+                -webkit-appearance: none !important;
+            }
+            
+            /* ล็อกพื้นที่วาดรูปให้ดันตารางบนล่างให้ชิดขอบ */
+            .drawing-area { 
+                flex-grow: 1 !important; 
+                width: 100% !important;
+                border-top: 1px solid #000 !important; 
+                border-bottom: 1px solid #000 !important;
+                margin: 0 !important;
+                position: relative;
+                min-height: 0 !important;
+            }
+            
+            canvas {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="py-4 sm:py-8 px-2 sm:px-4" id="mainBody">
+
+    <!-- แถบเครื่องมือ (ซ่อนตอนพิมพ์) -->
+    <div class="max-w-[900px] mx-auto mb-6 flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
+        <div class="flex gap-2 w-full sm:w-auto">
+            <a href="FlashingT.html" class="flex-1 sm:flex-none bg-white border border-blue-300 text-blue-600 hover:bg-blue-50 px-4 py-2.5 rounded-lg font-bold flex justify-center items-center gap-2 transition-colors shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                เพิ่มครอบแบบอื่น
+            </a>
+            <button onclick="clearAllItems()" class="bg-white border border-red-200 text-red-500 hover:bg-red-50 px-4 py-2.5 rounded-lg font-medium flex justify-center items-center gap-2 transition-colors shadow-sm" title="ล้างรายการทั้งหมด">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+        </div>
+        <button onclick="window.print()" class="w-full sm:w-auto bg-emerald-600 text-white hover:bg-emerald-700 px-8 py-2.5 rounded-lg font-bold flex justify-center items-center gap-2 transition-colors shadow-md text-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            สั่งพิมพ์ (Print)
+        </button>
+    </div>
+
+    <!-- พื้นที่แสดงแบบฟอร์ม -->
+    <div id="itemsContainer" class="print-wrapper max-w-[900px] mx-auto space-y-8">
+        <!-- ฟอร์มจะถูกสร้างที่นี่ -->
+    </div>
+
+    <script>
+        let orderItems = [];
+        let globalCustInfo = { name: '', docNo: '', dateStr: '', issuer: '', rollNo: '', transport: '', deliverDate: '', thick: '0.35MM', brand: 'TKนอก' };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCustomerInfo();
+
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            globalCustInfo.dateStr = dateStr;
+            
+            if(!globalCustInfo.docNo) {
+                globalCustInfo.docNo = 'PDLPN' + today.getFullYear().toString().substring(2) + (today.getMonth()+1).toString().padStart(2, '0') + '-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            }
+
+            const storedList = localStorage.getItem('flashingOrdersList');
+            if (storedList) orderItems = JSON.parse(storedList);
+
+            const newData = localStorage.getItem('flashingOrderData');
+            if (newData) {
+                const parsedNewData = JSON.parse(newData);
+                orderItems.push({
+                    id: Date.now() + Math.floor(Math.random() * 1000),
+                    segments: parsedNewData.segments || [],
+                    colorName: parsedNewData.colorHex || '#CCCCCC',
+                    colorHex: parsedNewData.colorHex || '#CCCCCC',
+                    itemName: 'ครอบสั่งทำ',
+                    totalLength: parsedNewData.totalLength || 0,
+                    lengths: [{ length: '', qty: '' }] 
+                });
+
+                localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+                localStorage.removeItem('flashingOrderData');
+            }
+
+            if (orderItems.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            renderForms();
+        });
+
+        // รีเฟรชภาพก่อนปริ้นท์ เพื่อความคมชัดสูงสุด
+        window.addEventListener('beforeprint', () => {
+            orderItems.forEach(item => {
+                drawBlueprint(item.segments, `canvas_${item.id}`);
+            });
+        });
+
+        function handleInputSync(field, value) {
+            globalCustInfo[field] = value;
+            localStorage.setItem('flashingGlobalInfo', JSON.stringify(globalCustInfo));
+            
+            document.querySelectorAll(`.sync-${field}`).forEach(el => {
+                if(el.value !== value) el.value = value;
+            });
+            document.querySelectorAll(`.sync-${field}-display`).forEach(el => {
+                el.textContent = value;
+            });
+        }
+
+        function loadCustomerInfo() {
+            const infoStr = localStorage.getItem('flashingGlobalInfo');
+            if(infoStr) {
+                const info = JSON.parse(infoStr);
+                globalCustInfo = { ...globalCustInfo, ...info };
+            }
+        }
+
+        function showEmptyState() {
+            document.getElementById('itemsContainer').innerHTML = `
+                <div class="bg-white rounded-xl shadow-md p-10 text-center border border-gray-200">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">ยังไม่มีรายการสั่งผลิต</h3>
+                    <p class="text-gray-500 mb-6">กรุณากดเพิ่มแบบหน้าตัดชิ้นงาน เพื่อนำเข้าสู่แบบฟอร์มใบสั่งผลิต</p>
+                    <a href="FlashingT.html" class="inline-flex bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg">
+                        + เริ่มต้นออกแบบหน้าตัด
+                    </a>
+                </div>
+            `;
+        }
+
+        function renderForms() {
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            orderItems.forEach((item, index) => {
+                // Wrapper หลักที่จับทุกอย่างรวมเป็นตารางเดียว
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "form-container mb-8 relative";
+
+                let lengthsHtml = '';
+                let totalMeters = 0;
+
+                item.lengths.forEach((lenObj, lIndex) => {
+                    const l = parseFloat(lenObj.length) || 0;
+                    const q = parseFloat(lenObj.qty) || 0;
+                    totalMeters += (l * q);
+
+                    lengthsHtml += `
+                        <tr>
+                            <td class="w-[60px]">${lIndex + 1}</td>
+                            <td class="text-left pl-4 font-bold">
+                                <div class="flex items-center flex-wrap gap-1 text-[13px] sm:text-[14px]">
+                                    <input type="text" class="form-input left bold blue w-auto min-w-[80px] max-w-[120px] border-b border-dashed border-gray-300 print:border-none p-0 inline-block" placeholder="ระบุชื่อ..." value="${item.itemName || 'ครอบสั่งทำ'}" oninput="updateItemName(${index}, this.value)">
+                                    <span class="text-gray-800 whitespace-nowrap"> 
+                                        / ${parseFloat(item.totalLength).toFixed(1)} 
+                                        / <span class="sync-thick-display">${globalCustInfo.thick}</span> 
+                                        / <div class="w-3 h-3 rounded-sm border border-gray-500 shadow-inner inline-block align-middle mb-[2px]" style="background-color: ${item.colorHex};"></div> <span id="item_color_display_${index}_${lIndex}" class="sync-color-display">${item.colorName}</span> 
+                                        / <span class="sync-brand-display">${globalCustInfo.brand}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="w-[120px]">
+                                <input type="number" step="0.01" class="form-input bold blue w-16 mx-auto" placeholder="0.00" value="${lenObj.length}" oninput="updateLength(${index}, ${lIndex}, 'length', this.value)">
+                            </td>
+                            <td class="w-[100px] relative">
+                                <input type="number" class="form-input bold blue w-12 mx-auto" placeholder="0" value="${lenObj.qty}" oninput="updateLength(${index}, ${lIndex}, 'qty', this.value)">
+                                <button onclick="removeLength(${index}, ${lIndex})" class="absolute right-1 top-1/2 -translate-y-1/2 text-red-300 hover:text-red-500 no-print" title="ลบแถว">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                itemDiv.innerHTML = `
+                    <div class="absolute -top-10 right-0 no-print">
+                        <button onclick="removeProfile(${index})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded text-sm font-bold flex items-center gap-1 transition-colors border border-red-200 shadow-sm bg-white">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg ลบชิ้นงานนี้
+                        </button>
+                    </div>
+
+                    <!-- 1. ส่วนหัวฟอร์ม -->
+                    <table class="form-table header-table">
+                        <tr>
+                            <td colspan="2" class="font-bold text-2xl py-3">
+                                ใบรายการผลิต
+                            </td>
+                            <td colspan="2" class="font-bold text-xl text-red-600">
+                                SANGTHAI
+                            </td>
+                            <td rowspan="2" class="w-[100px] p-1 align-top">
+                                <!-- แก้ไขส่วนรูปภาพที่นี่ (ดึงจากเครื่อง D:\\antigravityCode\\logo-img และพยายามดึงหลายนามสกุล/พาร์ท) -->
+                                <div class="w-[70px] h-[70px] mx-auto mt-1 flex items-center justify-center">
+                                    <img src="file:///D:/antigravityCode/logo-img.png" alt="QR Code" class="max-w-full max-h-full object-contain" onerror="let a = parseInt(this.dataset.a || 0) + 1; this.dataset.a = a; if(a===1) this.src='file:///D:/antigravityCode/logo-img.jpg'; else if(a===2) this.src='logo-img.png'; else if(a===3) this.src='logo-img.jpg'; else { this.onerror=null; this.parentNode.innerHTML='<div class=\\'border border-gray-300 w-full h-full bg-gray-50 flex items-center justify-center text-[10px] text-gray-500 text-center leading-tight no-print\\'>ไม่พบรูป<br>QR Code</div>'; }">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="w-[80px] font-bold bg-[#f8fafc]">ชื่อลูกค้า</td>
+                            <td colspan="3">
+                                <input type="text" class="form-input left bold blue sync-name" placeholder="คลิกเพื่อระบุชื่อลูกค้า / บริษัท..." value="${globalCustInfo.name}" oninput="handleInputSync('name', this.value)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-[#f8fafc]">NO.</td>
+                            <td class="w-[180px]">
+                                <input type="text" class="form-input bold sync-docNo uppercase" placeholder="เลขที่เอกสาร" value="${globalCustInfo.docNo}" oninput="handleInputSync('docNo', this.value)">
+                            </td>
+                            <td class="w-[80px] font-bold bg-[#f8fafc]">วันที่</td>
+                            <td colspan="2" class="font-bold text-blue-800">${globalCustInfo.dateStr}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-[#f8fafc]">สี</td>
+                            <td>
+                                <div class="flex items-center justify-center gap-1.5 w-full">
+                                    <div class="w-4 h-4 rounded-sm border border-gray-400 shrink-0 shadow-inner no-print" style="background-color: ${item.colorHex};"></div>
+                                    <input type="text" class="form-input bold red flex-1 text-center" placeholder="ระบุสี..." value="${item.colorName}" oninput="updateColorName(${index}, this.value)">
+                                </div>
+                            </td>
+                            <td class="font-bold bg-[#f8fafc]">ความหนา</td>
+                            <td>
+                                <input type="text" class="form-input bold blue sync-thick" placeholder="0.35MM" value="${globalCustInfo.thick}" oninput="handleInputSync('thick', this.value)">
+                            </td>
+                            <td class="font-bold">
+                                ยี่ห้อ <input type="text" class="form-input bold red inline-block w-[50px] ml-1" placeholder="ยี่ห้อ" value="${globalCustInfo.brand}" oninput="handleInputSync('brand', this.value)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-[#f8fafc]">ผู้ออกผลิต</td>
+                            <td>
+                                <input type="text" class="form-input sync-issuer" placeholder="ชื่อพนักงาน" value="${globalCustInfo.issuer}" oninput="handleInputSync('issuer', this.value)">
+                            </td>
+                            <td class="font-bold bg-[#f8fafc]" colspan="2">เลขที่ม้วนสาขา</td>
+                            <td>
+                                <input type="text" class="form-input bold blue sync-rollNo" placeholder="ระบุเลขม้วน" value="${globalCustInfo.rollNo}" oninput="handleInputSync('rollNo', this.value)">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- 2. ตารางรายการชิ้นงาน -->
+                    <table class="form-table" style="border-top: none;">
+                        <thead>
+                            <tr>
+                                <th class="w-[60px]">ลำดับ</th>
+                                <th>รายการ</th>
+                                <th class="w-[120px]">ความยาว (ม.)</th>
+                                <th class="w-[100px]">จำนวน</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${lengthsHtml}
+                        </tbody>
+                    </table>
+                    
+                    <div class="flex justify-end p-1.5 bg-gray-50 border-b border-black no-print">
+                        <button onclick="addLengthRow(${index})" class="text-emerald-600 font-bold text-xs hover:bg-emerald-100 px-3 py-1 rounded-md border border-emerald-300 bg-white">
+                            + เพิ่มช่องระบุความยาว
+                        </button>
+                    </div>
+
+                    <!-- 3. พื้นที่วาดภาพ 2D (เชื่อมเป็นเนื้อเดียวกับตาราง) -->
+                    <div class="drawing-area flex-grow relative min-h-[300px] w-full border-b border-black bg-white">
+                        <canvas id="canvas_${item.id}" class="w-full h-full absolute inset-0 p-4"></canvas>
+                    </div>
+
+                    <!-- 4. ส่วนท้ายฟอร์ม (Footer Table) -->
+                    <table class="form-table footer-table" style="border-top: none;">
+                        <tr>
+                            <td rowspan="2" class="w-[100px] font-bold align-top bg-[#f8fafc]">หมายเหตุ</td>
+                            <td colspan="2" class="align-top text-left h-[40px]">
+                                <input type="text" class="form-input left bold red sync-note" placeholder="คลิกเพื่อระบุหมายเหตุ (เช่น ส่งวันพุธ)..." value="${item.note || ''}" oninput="updateNote(${index}, this.value)">
+                            </td>
+                            <td class="w-[100px] font-bold bg-[#f8fafc]">รวมเมตร</td>
+                            <td class="w-[120px] font-black text-lg text-blue-800" id="total_m_${index}">${totalMeters.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold w-[120px] bg-[#f8fafc]">การรับสินค้า</td>
+                            <td>
+                                <input type="text" class="form-input sync-transport" placeholder="ระบุบริษัทจัดส่ง..." value="${globalCustInfo.transport}" oninput="handleInputSync('transport', this.value)">
+                            </td>
+                            <td class="font-bold w-[80px] bg-[#f8fafc]">วันที่</td>
+                            <td>
+                                <input type="date" class="form-input bold blue sync-deliverDate" value="${globalCustInfo.deliverDate || ''}" oninput="handleInputSync('deliverDate', this.value)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-[#f8fafc]">ผู้ตรวจสอบ</td>
+                            <td colspan="4" class="text-left py-3">
+                                <input type="text" class="form-input left w-1/2" placeholder="ลายเซ็น / ชื่อผู้ตรวจ">
+                            </td>
+                        </tr>
+                    </table>
+                `;
+                container.appendChild(itemDiv);
+
+                // เรียกวาด 2D ทันที
+                setTimeout(() => {
+                    drawBlueprint(item.segments, `canvas_${item.id}`);
+                }, 50);
+            });
+        }
+
+        window.updateLength = function(profileIndex, lengthIndex, field, value) {
+            orderItems[profileIndex].lengths[lengthIndex][field] = value;
+            localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+            
+            let total = 0;
+            orderItems[profileIndex].lengths.forEach(l => {
+                total += (parseFloat(l.length) || 0) * (parseFloat(l.qty) || 0);
+            });
+            document.getElementById(`total_m_${profileIndex}`).innerText = total.toFixed(2);
+        };
+
+        window.updateItemName = function(profileIndex, value) {
+            orderItems[profileIndex].itemName = value;
+            localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+        };
+
+        window.updateColorName = function(profileIndex, value) {
+            orderItems[profileIndex].colorName = value;
+            localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+            orderItems[profileIndex].lengths.forEach((_, lIndex) => {
+                const el = document.getElementById(`item_color_display_${profileIndex}_${lIndex}`);
+                if(el) el.textContent = value;
+            });
+        };
+        
+        window.updateNote = function(profileIndex, value) {
+            orderItems[profileIndex].note = value;
+            localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+        };
+
+        window.addLengthRow = function(profileIndex) {
+            orderItems[profileIndex].lengths.push({ length: '', qty: '' });
+            localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+            renderForms();
+        };
+
+        window.removeLength = function(profileIndex, lengthIndex) {
+            orderItems[profileIndex].lengths.splice(lengthIndex, 1);
+            if(orderItems[profileIndex].lengths.length === 0) {
+                orderItems[profileIndex].lengths.push({ length: '', qty: '' });
+            }
+            localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+            renderForms();
+        };
+
+        window.removeProfile = function(index) {
+            if(confirm('ต้องการลบแบบหน้าตัดนี้ออกจากใบสั่งผลิตใช่หรือไม่?')) {
+                orderItems.splice(index, 1);
+                localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+                if (orderItems.length === 0) {
+                    showEmptyState();
+                } else {
+                    renderForms();
+                }
+            }
+        };
+
+        window.clearAllItems = function() {
+            if(confirm('คำเตือน: คุณต้องการล้างรายการแบบหน้าตัดทั้งหมดใช่หรือไม่?')) {
+                orderItems = [];
+                localStorage.setItem('flashingOrdersList', JSON.stringify(orderItems));
+                showEmptyState();
+            }
+        };
+
+        // Engine วาดภาพ 2D ล็อกความละเอียดระดับ 4K สำหรับปริ้นท์
+        function drawBlueprint(segments, canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // ล็อก Resolution ภายในให้สูงและตายตัวเสมอ เพื่อป้องกันเบราว์เซอร์เอ๋อตอนสลับโหมด Print
+            const w = 1600; 
+            const h = 800;
+            
+            canvas.width = w;
+            canvas.height = h;
+
+            if (!segments || segments.length === 0) return;
+
+            let pts = [{x: 0, y: 0}];
+            let curX = 0, curY = 0;
+            segments.forEach(seg => {
+                let rad = seg.angle * Math.PI / 180;
+                curX += seg.length * Math.cos(rad);
+                curY -= seg.length * Math.sin(rad);
+                pts.push({x: curX, y: curY});
+            });
+
+            let minX = Math.min(...pts.map(p=>p.x)), maxX = Math.max(...pts.map(p=>p.x));
+            let minY = Math.min(...pts.map(p=>p.y)), maxY = Math.max(...pts.map(p=>p.y));
+            let boundsW = maxX - minX;
+            let boundsH = maxY - minY;
+
+            const padding = 150; // กันขอบให้กว้างพอสำหรับตัวหนังสือขนาดใหญ่
+            const availableW = w - (padding * 2);
+            const availableH = h - (padding * 2);
+            
+            let scale = 1;
+            if (boundsW > 0 || boundsH > 0) {
+                const scaleX = availableW / (boundsW || 1);
+                const scaleY = availableH / (boundsH || 1);
+                scale = Math.min(scaleX, scaleY);
+            }
+            
+            if (scale > 5) scale = 5;
+
+            const boundsCenterX = minX + (boundsW / 2);
+            const boundsCenterY = minY + (boundsH / 2);
+            const originX = (w / 2) - (boundsCenterX * scale);
+            const originY = (h / 2) - (boundsCenterY * scale);
+
+            ctx.clearRect(0, 0, w, h);
+
+            curX = originX;
+            curY = originY;
+
+            // เส้นหนาและคมชัดมาก
+            ctx.beginPath();
+            ctx.moveTo(curX, curY);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#1d4ed8'; 
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+
+            segments.forEach(seg => {
+                let rad = seg.angle * Math.PI / 180;
+                curX += (seg.length * scale) * Math.cos(rad);
+                curY -= (seg.length * scale) * Math.sin(rad);
+                ctx.lineTo(curX, curY);
+            });
+            ctx.stroke();
+
+            let txtX = originX; 
+            let txtY = originY;
+
+            ctx.font = 'bold 32px Sarabun, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+
+            segments.forEach((seg, i) => {
+                let rad = seg.angle * Math.PI / 180;
+                let nextX = txtX + (seg.length * scale) * Math.cos(rad);
+                let nextY = txtY - (seg.length * scale) * Math.sin(rad);
+
+                let midX = (txtX + nextX) / 2;
+                let midY = (txtY + nextY) / 2;
+
+                ctx.save();
+                ctx.translate(midX, midY);
+                let textAngle = -rad;
+                if (textAngle < -Math.PI/2 || textAngle > Math.PI/2) textAngle += Math.PI; 
+                ctx.rotate(textAngle);
+                
+                let text = `${seg.length} mm. (${seg.angle}°)`;
+                let tw = ctx.measureText(text).width;
+                
+                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.fillRect(-tw/2 - 10, -48, tw + 20, 44);
+
+                ctx.fillStyle = '#000000';
+                ctx.fillText(text, 0, -8);
+                ctx.restore();
+
+                txtX = nextX;
+                txtY = nextY;
+            });
+            
+            // วาดจุดเชื่อมต่อทีหลังสุด จะได้ทับเส้น
+            txtX = originX; 
+            txtY = originY;
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath(); ctx.arc(txtX, txtY, 14, 0, Math.PI * 2); ctx.fill();
+            
+            segments.forEach(seg => {
+                let rad = seg.angle * Math.PI / 180;
+                txtX += (seg.length * scale) * Math.cos(rad);
+                txtY -= (seg.length * scale) * Math.sin(rad);
+                ctx.fillStyle = '#ef4444';
+                ctx.beginPath(); ctx.arc(txtX, txtY, 12, 0, Math.PI * 2); ctx.fill();
+            });
+        }
+        
+        window.addEventListener('resize', () => {
+            orderItems.forEach(item => {
+                drawBlueprint(item.segments, `canvas_${item.id}`);
+            });
+        });
+    </script>
+</body>
+</html>
