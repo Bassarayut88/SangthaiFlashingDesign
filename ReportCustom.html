@@ -148,7 +148,12 @@
 
     <!-- แถบเครื่องมือ (ซ่อนตอนพิมพ์) -->
     <div class="max-w-[900px] mx-auto mb-6 flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
-        <div class="flex gap-2 w-full sm:w-auto">
+        <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto">
+            <!-- ปุ่มย้อนกลับ -->
+            <a href="Custom3D.html" class="flex-1 sm:flex-none bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2.5 rounded-lg font-bold flex justify-center items-center gap-2 transition-colors shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                ย้อนกลับ
+            </a>
             <a href="FlashingT.html" class="flex-1 sm:flex-none bg-white border border-blue-300 text-blue-600 hover:bg-blue-50 px-4 py-2.5 rounded-lg font-bold flex justify-center items-center gap-2 transition-colors shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 เพิ่มครอบแบบอื่น
@@ -246,7 +251,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-2">ยังไม่มีรายการสั่งผลิต</h3>
                     <p class="text-gray-500 mb-6">กรุณากดเพิ่มแบบหน้าตัดชิ้นงาน เพื่อนำเข้าสู่แบบฟอร์มใบสั่งผลิต</p>
-                    <a href="FlashingT.html" class="inline-flex bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg">
+                    <a href="Custom3D.html" class="inline-flex bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg">
                         + เริ่มต้นออกแบบหน้าตัด
                     </a>
                 </div>
@@ -300,7 +305,7 @@
                 itemDiv.innerHTML = `
                     <div class="absolute -top-10 right-0 no-print">
                         <button onclick="removeProfile(${index})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded text-sm font-bold flex items-center gap-1 transition-colors border border-red-200 shadow-sm bg-white">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg ลบชิ้นงานนี้
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> ลบชิ้นงานนี้
                         </button>
                     </div>
 
